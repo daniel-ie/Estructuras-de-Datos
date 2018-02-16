@@ -1,0 +1,207 @@
+#include <iostream>
+
+using namespace std ;
+
+// Clase fecha
+class Trabajador{
+public:
+    class Invalid{} ;
+
+    Trabajador(int pot1, int pot2) ; // constructor
+
+    // Prints parametrizados
+    void llene(int a){
+        cout << "Llene la olla de (" << a << ") litros.\n" ;
+    }
+    void llene_con(int a, int b){ // origen, destino
+        if(b > 0)
+            cout << "Llene la olla de (" << b << ") litros con la olla de (" << a << ") litros.\n" ;
+        else // b=0 es la olla final
+            cout << "Pase lo que tenga la olla de (" << a << ") litros a la olla final\n" ;
+    }
+    void bote(int a){
+        cout << "Bote el contenido de la olla de (" << a << ") litros\n" ;
+    }
+
+private:
+    int pot1, pot2 ;
+    bool is_valid() ;
+} ;
+
+// Define la referencia para Trabajador()
+Trabajador::Trabajador(int pot11, int pot22){
+    pot1 = pot11 ;
+    pot2 = pot22 ;
+    if(!is_valid()) // chequea la validacion
+        throw Invalid{} ;
+}
+bool Trabajador::is_valid(){ // condiones para validar
+    if(pot1 < pot2) // valida que el pichel1 sea mas grande que pichel2
+        return false ;
+    else
+        return true ;
+}
+
+// Funcion que llama la Clase y valida
+void PotsWork(int liters){
+    int pot1 = 9, pot2 = 4 ;
+    try{
+        Trabajador Pots {pot1, pot2} ;
+
+        // ** Definir los pivotes **
+        int p = pot1 ;
+        int pivots[pot1] ;
+        bool once = false ;
+        int i = 0 ; //, j = 0 ;
+
+        while(p > 0){
+            if(p < pot2 && once == false){
+                pivots[i] = pot2 ;
+                once = true ;
+                p += pot2 ;
+            }
+            else
+                pivots[i] = p ;
+            cout << "pivote " << pivots[i] << "\n" ;
+            p -= pot2 ;
+            i++ ;
+        }
+
+        // ** Duplicar pivotes **
+
+        // se comienza desde el pivote mayor
+
+        cout << "i = " << i << "\n" ;
+
+        // priorizar a solo un output
+for(int l=0; l<10; l++){
+        for(int j=0; j<10; j++){
+            for(int k=0; k<4; k++){
+                // litros igual a pichel
+                if(pivots[j] == liters){
+                    //Pots.bote(pot1) ;
+                    cout << "litros igual a pichel\n" ;
+                    break ;
+                }
+
+                if(pivots[j]+pivots[j+k]*l == liters){
+                    cout << "k=" << k  << ", j=" << j << ", l=" << l << "\n" ;
+                    cout << pivots[j]+pivots[j+k]*l << "\n" ;
+                    break ;
+                }
+
+                /*if(k==2){
+                    for(int l=0; l<10; l++){
+                        if(pivots[j]+pivots[j+k]*l == liters){
+                            cout << "litros igual a, iteraciones " << l  << "\n" ;
+                            break ;
+                        }
+                    }
+                }*/
+
+                //else{
+                //    cout << "almost\n" ;
+
+
+
+                //if(pivots[j]+pivots)
+
+            }
+        }
+}
+        // Chequea el valor de pivotes duplicados
+
+
+        //if(liters % pot2 == 0)
+        //    Pots.llene(pot2) ;
+        // hacer 1 litro
+        /*Pots.llene(pot1) ;
+        Pots.llene_con(pot1, pot2) ;
+        Pots.bote(pot2) ;
+        Pots.llene_con(pot1, pot2) ;
+        Pots.llene_con(pot1, 0) ;
+
+        // hacer 5 litros
+        Pots.llene(pot1) ;
+        Pots.llene_con(pot1, pot2) ;
+        Pots.bote(pot2) ;
+        Pots.llene_con(pot1, 0) ; */
+
+        /*Pots.llene(pot1) ;
+        Pots.llene_con(pot1, pot2) ;
+        Pots.llene_con(pot1, 0) ;
+        Pots.bote(pot2) ;
+        Pots.llene(pot1) ;
+        Pots.llene_con(pot1, pot2) ;
+        Pots.bote(pot2) ;
+        Pots.llene_con(pot1, pot2) ;
+        Pots.llene_con(pot1, 0) ;*/
+
+    }
+    catch(Trabajador::Invalid){
+        //error("Invalid date!") ;
+        cout << "Invalid date \n" ;
+    }
+}
+
+int main()
+{
+    //Trabajador birthday {6, 8, 1994} ;
+    // birthday.m = 12 ; no se puede, es privado
+    //cout << "Month from class is: " << birthday.month() << "\n" ;
+
+    // Funcion que llama la clase Trabajador
+    PotsWork(7) ;
+
+    return 0 ;
+}
+
+/*
+            // litros igual a (pichel duplicado)
+            else if(pivots[j]+pivots[j] == liters){ // pichel doble
+                //Pots.llene(pot1) ;
+                cout << "litros igual a (pichel duplicado)\n" ;
+                break ;
+            }
+
+            // litros igual a (pichel_actual+pichel_anterior)
+            else if(pivots[j]+pivots[j+1] == liters){ // pichel_act + pichel_anterior
+                //Pots.llene_con(pot1, pot2) ;
+                cout << "litros igual a (pichel_actual+pichel_anterior)\n" ;
+                break ;
+            }
+
+            // litros igual a (pichel_actual+pichel_transanterior)
+            else if(pivots[j]+pivots[j+2] == liters){
+               cout << "litros igual a (pichel_actual+pichel_transanterior)\n" ;
+               break ;
+            }
+
+            // trans-trans-anterior
+            else if(pivots[j]+pivots[j+3] == liters){
+                cout << "litros igual a (pichel_actual+pichel_tras_tras_anterior\n" ;
+            }
+*/
+
+
+
+/*for(int i=0; i<pot1; i++){
+
+    p -=  pot2 ;
+
+    if(p > 0){
+        pivots[i] = p ;
+    }
+    else
+        break ;
+
+   cout << "pivote:" << pivots[i] << "\n" ;
+
+    //p -=  pot2 ;
+}*/
+
+/*if(p < pot2){  //pot2 > p-pot2 && 0 > p-pot2){
+    pivots[i] = pot2 ;
+    p += pot2 ;
+    //continue ;
+}*/
