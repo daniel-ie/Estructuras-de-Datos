@@ -52,7 +52,7 @@ void PotsWork(int liters){
         int p = pot1 ;
         int pivots[pot1] ;
         bool once = false ;
-        int i = 0 ; //, j = 0 ;
+        int i = 0 ;
 
         while(p > 0){
             if(p < pot2 && once == false){
@@ -67,50 +67,34 @@ void PotsWork(int liters){
             i++ ;
         }
 
-        // ** Duplicar pivotes **
-
-        // se comienza desde el pivote mayor
-
-        cout << "i = " << i << "\n" ;
-
         // priorizar a solo un output
-for(int l=0; l<10; l++){
-        for(int j=0; j<10; j++){
-            for(int k=0; k<4; k++){
-                // litros igual a pichel
-                if(pivots[j] == liters){
-                    //Pots.bote(pot1) ;
-                    cout << "litros igual a pichel\n" ;
-                    break ;
-                }
 
-                if(pivots[j]+pivots[j+k]*l == liters){
-                    cout << "k=" << k  << ", j=" << j << ", l=" << l << "\n" ;
-                    cout << pivots[j]+pivots[j+k]*l << "\n" ;
-                    break ;
-                }
+        // ** Obtiene la combinacion más rápida **
+        bool getout = false ;
 
-                /*if(k==2){
-                    for(int l=0; l<10; l++){
-                        if(pivots[j]+pivots[j+k]*l == liters){
-                            cout << "litros igual a, iteraciones " << l  << "\n" ;
-                            break ;
-                        }
+        for(int l=0; l<10; l++){
+            for(int j=0; j<10; j++){
+                for(int k=0; k<10; k++){
+                    if(pivots[j]+pivots[j+k]*l == liters){
+                        cout << "k=" << k  << ", j=" << j << ", l=" << l << "\n" ;
+                        cout << pivots[j]+pivots[j+k]*l << "\n\n" ;
+
+                        // por aqui va la progra
+                        Pots.llene(pivots[j]) ;
+                        Pots.llene_con(pivots[j], 0) ;
+
+                        getout = true ;
+                        break ;
                     }
-                }*/
-
-                //else{
-                //    cout << "almost\n" ;
-
-
-
-                //if(pivots[j]+pivots)
-
+                }
+                if(getout == true)
+                    break ;
             }
+            if(getout == true)
+                break ;
         }
-}
-        // Chequea el valor de pivotes duplicados
 
+        //cout <<"\n" << pivots[1] << "\n" ;
 
         //if(liters % pot2 == 0)
         //    Pots.llene(pot2) ;
@@ -151,10 +135,70 @@ int main()
     //cout << "Month from class is: " << birthday.month() << "\n" ;
 
     // Funcion que llama la clase Trabajador
-    PotsWork(7) ;
+    PotsWork(4) ;
 
     return 0 ;
 }
+
+/*if(pivots[j] == liters){ // litros igual a pichel
+    //Pots.bote(pot1) ;
+    cout << "litros igual a pichel\n" ;
+    break ;
+}*/
+
+/*for(int l=3; l<=0; l--){
+    for(int j=3; j<=0; j--){
+        for(int k=3; k<=0; k--){
+            if(pivots[j] == liters){ // litros igual a pichel
+                //Pots.bote(pot1) ;
+                cout << "litros igual a pichel\n" ;
+                break ;
+            }
+
+            if(pivots[j]+pivots[j+k]*l == liters){
+                cout << "k=" << k  << ", j=" << j << ", l=" << l << "\n" ;
+                cout << pivots[j]+pivots[j+k]*l << "\n" ;
+                break ;
+            }
+            //break ;
+        }
+    }
+}*/
+
+/*     p = 1;
+     while(p <= pot1){
+         if(p > pot2 && once == false){
+             pivots[i] = pot2 ;
+             once = true ;
+             p -= pot2 ;
+         }
+         else
+             pivots[i] = p ;
+         cout << "pivote " << pivots[i] << "\n" ;
+         p += pot2 ;
+         i++ ;
+
+     }*/
+
+
+/*if(k==2){
+    for(int l=0; l<10; l++){
+        if(pivots[j]+pivots[j+k]*l == liters){
+            cout << "litros igual a, iteraciones " << l  << "\n" ;
+            break ;
+        }
+    }
+}*/
+
+//else{
+//    cout << "almost\n" ;
+
+
+
+//if(pivots[j]+pivots)
+
+
+
 
 /*
             // litros igual a (pichel duplicado)
