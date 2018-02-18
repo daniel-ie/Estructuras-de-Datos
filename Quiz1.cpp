@@ -48,78 +48,80 @@ void PotsWork(int liters){
     try{
         Trabajador Pots {pot1, pot2} ;
 
-        // ** Definir los pivotes **
-        int p = pot1 ;
-        int pivots[pot1] ;
-        bool once = false ;
-        int i = 0 ;
-
-        while(p > 0){
-            if(p < pot2 && once == false){
-                pivots[i] = pot2 ;
-                once = true ;
-                p += pot2 ;
-            }
-            else
-                pivots[i] = p ;
-            cout << "pivote " << pivots[i] << "\n" ;
-            p -= pot2 ;
-            i++ ;
-        }
-
-        // priorizar a solo un output
-
-        // ** Obtiene la combinacion más rápida **
         bool getout = false ;
 
-        for(int l=0; l<10; l++){
-            for(int j=0; j<10; j++){
-                for(int k=0; k<10; k++){
-                    if(pivots[j]+pivots[j+k]*l == liters){
-                        cout << "k=" << k  << ", j=" << j << ", l=" << l << "\n" ;
-                        cout << pivots[j]+pivots[j+k]*l << "\n\n" ;
+        //int thor = ( (pot1-pot2*i) + (pot1-pot2*(i+j))*k ) ;
 
-                        // por aqui va la progra
-                        Pots.llene(pivots[j]) ;
-                        Pots.llene_con(pivots[j], 0) ;
+        int i = 0, j = 0, pot = 0, n = 0, toOne = 0 ;
+        bool multiplo = false ;
 
-                        getout = true ;
-                        break ;
-                    }
-                }
-                if(getout == true)
-                    break ;
-            }
-            if(getout == true)
+
+        while(1){
+            if(pot1-pot2*toOne == 1)
                 break ;
+            toOne++ ;
         }
 
-        //cout <<"\n" << pivots[1] << "\n" ;
+/* ------- Prioridad multiplo de algun pichel ---------- */
+        if((liters % pot1) == 0){
+            pot = pot1 ;
+            n = liters/pot ;
+            multiplo = true ;
+        }
+        else if((liters % pot2) == 0){
+            pot = pot2 ;
+            n = liters/pot ;
+            multiplo = true ;
+        }
+        cout << "modulo " << liters % pot2 << "\n" ;
 
-        //if(liters % pot2 == 0)
-        //    Pots.llene(pot2) ;
-        // hacer 1 litro
-        /*Pots.llene(pot1) ;
-        Pots.llene_con(pot1, pot2) ;
-        Pots.bote(pot2) ;
-        Pots.llene_con(pot1, pot2) ;
-        Pots.llene_con(pot1, 0) ;
+        if(multiplo == true){
+            for(i=0; i<n; i++){
+                    Pots.llene(pot) ;
+                    Pots.llene_con(pot, 0) ;
+            }
+            cout << "\n" ;
+        }
+/* ---------------------------------------------------- */
+        if(multiplo == false){
+            for(i=0; i<=pot1; i++){
+                if((pot1-pot2*i) < liters){  // 6, 7 litros
+                    // +5 litros
+                    Pots.llene(pot1) ;
+                    while(j < i){
+                        Pots.llene_con(pot1, pot2) ;
+                        Pots.bote(pot2) ;
+                        j++ ;
+                    }
+                    Pots.llene_con(pot1, 0) ;
+                    cout << ", +5 \n\n" ;
 
-        // hacer 5 litros
-        Pots.llene(pot1) ;
-        Pots.llene_con(pot1, pot2) ;
-        Pots.bote(pot2) ;
-        Pots.llene_con(pot1, 0) ; */
+                    //hacer el calculo para saber cuantos +1 litros se deben completar
+                    for(int g=0; g<(liters-(pot1-pot2*i)); g++){
+                        // +1 litro
+                        Pots.llene(pot1) ;
+                        for(int h=0; h<toOne; h++){
+                            Pots.llene_con(pot1, pot2) ;
+                            Pots.bote(pot2) ;
+                        }
+                        Pots.llene_con(pot1, 0) ;  // +1 litro
+                        cout << ", +1 \n" ;
+                    }
+                    break ;
+                }
+                else if((pot1-pot2*i) == liters){  // 5 y 1 litros
+                    Pots.llene(pot1) ;
+                    while(j < i){
+                        Pots.llene_con(pot1, pot2) ;
+                        Pots.bote(pot2) ;
+                        j++ ;
+                    }
+                    Pots.llene_con(pot1, 0) ;
+                    break ;
+                }
+            }
+        }
 
-        /*Pots.llene(pot1) ;
-        Pots.llene_con(pot1, pot2) ;
-        Pots.llene_con(pot1, 0) ;
-        Pots.bote(pot2) ;
-        Pots.llene(pot1) ;
-        Pots.llene_con(pot1, pot2) ;
-        Pots.bote(pot2) ;
-        Pots.llene_con(pot1, pot2) ;
-        Pots.llene_con(pot1, 0) ;*/
 
     }
     catch(Trabajador::Invalid){
@@ -130,122 +132,8 @@ void PotsWork(int liters){
 
 int main()
 {
-    //Trabajador birthday {6, 8, 1994} ;
-    // birthday.m = 12 ; no se puede, es privado
-    //cout << "Month from class is: " << birthday.month() << "\n" ;
-
     // Funcion que llama la clase Trabajador
-    PotsWork(4) ;
+    PotsWork(3) ;
 
     return 0 ;
 }
-
-/*if(pivots[j] == liters){ // litros igual a pichel
-    //Pots.bote(pot1) ;
-    cout << "litros igual a pichel\n" ;
-    break ;
-}*/
-
-/*for(int l=3; l<=0; l--){
-    for(int j=3; j<=0; j--){
-        for(int k=3; k<=0; k--){
-            if(pivots[j] == liters){ // litros igual a pichel
-                //Pots.bote(pot1) ;
-                cout << "litros igual a pichel\n" ;
-                break ;
-            }
-
-            if(pivots[j]+pivots[j+k]*l == liters){
-                cout << "k=" << k  << ", j=" << j << ", l=" << l << "\n" ;
-                cout << pivots[j]+pivots[j+k]*l << "\n" ;
-                break ;
-            }
-            //break ;
-        }
-    }
-}*/
-
-/*     p = 1;
-     while(p <= pot1){
-         if(p > pot2 && once == false){
-             pivots[i] = pot2 ;
-             once = true ;
-             p -= pot2 ;
-         }
-         else
-             pivots[i] = p ;
-         cout << "pivote " << pivots[i] << "\n" ;
-         p += pot2 ;
-         i++ ;
-
-     }*/
-
-
-/*if(k==2){
-    for(int l=0; l<10; l++){
-        if(pivots[j]+pivots[j+k]*l == liters){
-            cout << "litros igual a, iteraciones " << l  << "\n" ;
-            break ;
-        }
-    }
-}*/
-
-//else{
-//    cout << "almost\n" ;
-
-
-
-//if(pivots[j]+pivots)
-
-
-
-
-/*
-            // litros igual a (pichel duplicado)
-            else if(pivots[j]+pivots[j] == liters){ // pichel doble
-                //Pots.llene(pot1) ;
-                cout << "litros igual a (pichel duplicado)\n" ;
-                break ;
-            }
-
-            // litros igual a (pichel_actual+pichel_anterior)
-            else if(pivots[j]+pivots[j+1] == liters){ // pichel_act + pichel_anterior
-                //Pots.llene_con(pot1, pot2) ;
-                cout << "litros igual a (pichel_actual+pichel_anterior)\n" ;
-                break ;
-            }
-
-            // litros igual a (pichel_actual+pichel_transanterior)
-            else if(pivots[j]+pivots[j+2] == liters){
-               cout << "litros igual a (pichel_actual+pichel_transanterior)\n" ;
-               break ;
-            }
-
-            // trans-trans-anterior
-            else if(pivots[j]+pivots[j+3] == liters){
-                cout << "litros igual a (pichel_actual+pichel_tras_tras_anterior\n" ;
-            }
-*/
-
-
-
-/*for(int i=0; i<pot1; i++){
-
-    p -=  pot2 ;
-
-    if(p > 0){
-        pivots[i] = p ;
-    }
-    else
-        break ;
-
-   cout << "pivote:" << pivots[i] << "\n" ;
-
-    //p -=  pot2 ;
-}*/
-
-/*if(p < pot2){  //pot2 > p-pot2 && 0 > p-pot2){
-    pivots[i] = pot2 ;
-    p += pot2 ;
-    //continue ;
-}*/
