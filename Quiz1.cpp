@@ -36,15 +36,28 @@ Trabajador::Trabajador(int pot11, int pot22){
         throw Invalid{} ;
 }
 bool Trabajador::is_valid(){ // condiones para validar
+    int i = 0 ;
+    bool oneLiter = true ;
+    while(1){ // revisa si se puede hacer 1 litro
+        if(pot1-pot2*i == 1)
+            break ;
+        else if(pot1-pot2*i < 0){
+            oneLiter = false ;
+            break ;
+            }
+        i++ ;
+    }
     if(pot1 < pot2) // valida que el pichel1 sea mas grande que pichel2
+        return false ;
+    else if(oneLiter == false)
         return false ;
     else
         return true ;
 }
 
 // Funcion que llama la Clase y valida
-void PotsWork(int liters){
-    int pot1 = 9, pot2 = 4 ;
+void LitrosResultantes(int liters, int pot1, int pot2){
+    //int pot1 = 10, pot2 = 4 ;
     try{
         Trabajador Pots {pot1, pot2} ;
 
@@ -70,6 +83,8 @@ void PotsWork(int liters){
             multiplo = true ;
         }
 /* ------------ Algoritmo para comandar instrucciones ------------- */
+
+// Multiplo de Base (mayor prioridad en optimizacion)
         if(multiplo == true){
             for(i=0; i<n; i++){
                 Pots.llene(pot) ;
@@ -78,25 +93,23 @@ void PotsWork(int liters){
             cout << "\n" ;
         }
 
-        if(multiplo == false && pot1>=liters){
+// No hay multiplo.
+// Obtiene la mejor combinacion entre las capacidades de los recipientes
+        if(multiplo == false && pot1>=liters){ // Litros pedidos menor que recipiente con mas capacidad
             for(i=0; i<=pot1; i++){
-                if((pot1-pot2*i) < liters){  // 6, 7 litros
-                    // +BaseMayor
-                    //int h ;
-                    //for(int e=0; e<i; e++){  // Base +5 y +1
-                        Pots.llene(pot1) ;
+                if((pot1-pot2*i) < liters){ // Banda entre Bases
+                    // Encuentra la Base mayor posible
+                    Pots.llene(pot1) ;
+                    Pots.llene_con(pot1, pot2) ;
+                    Pots.bote(pot2) ;
+                    for(int h=1; h<i; h++){
                         Pots.llene_con(pot1, pot2) ;
                         Pots.bote(pot2) ;
-                        for(int h=1; h<i; h++){
-                            Pots.llene_con(pot1, pot2) ;
-                            Pots.bote(pot2) ;
-                        }
-                        Pots.llene_con(pot1, 0) ;
-                        cout << ", +" << pot1-pot2*(i) << "\n\n" ;
-                        //break ;
-                    //}
+                    }
+                    Pots.llene_con(pot1, 0) ;
+                    cout << ", +" << pot1-pot2*(i) << "\n\n" ;
 
-                    // +1 litros
+                    // Completa a partir de la Base con +1 litros, (ultima prioridad en optimizacion)
                     for(int g=0; g<(liters-(pot1-pot2*(i))); g++){
                         Pots.llene(pot1) ;
                         for(int h=0; h<toOne; h++){
@@ -108,7 +121,7 @@ void PotsWork(int liters){
                     }
                     break ;
                 }
-                else if((pot1-pot2*i) == liters){  // 5 y 1 litros
+                else if((pot1-pot2*i) == liters){  // Litros igual a Base
                     Pots.llene(pot1) ;
                     for(int m=0; m<i; m++){
                         Pots.llene_con(pot1, pot2) ;
@@ -121,10 +134,10 @@ void PotsWork(int liters){
 
             }
         }
-
+        // Litros pedidos es mayor a la capacidad del recipiente mas grande
         else if(multiplo == false && pot1<liters){
             for(i=0; i<pot1; i++){
-                if((pot1+pot2*i) == liters){  // 13 y 17 litros
+                if((pot1+pot2*i) == liters){  // Litros igual a Base
                     for(int m=0; m<i; m++){
                         Pots.llene(pot1) ;
                         Pots.llene_con(pot1, 0) ;
@@ -137,20 +150,20 @@ void PotsWork(int liters){
                     }
                     break ;
                 }
-                else if((pot1+pot2*i) > liters){  // (Base + 1, 2 ..), (10, 11, 12...)
+                else if((pot1+pot2*i) > liters){  // Banda entre Bases
                     int m, f ;
-                    for(m=0; m<i; m++){ // +Base  +9
+                    for(m=0; m<i; m++){ // Encuentra la Base mayor posible
                         Pots.llene(pot1) ;
                         Pots.llene_con(pot1, 0) ;
-                        for(f=0; f<liters-(pot1+pot2*(f+1)); f++){  // +4
+                        for(f=0; f<liters-(pot1+pot2*(f+1)); f++){
                             Pots.llene(pot2) ;
                             Pots.llene_con(pot2, 0) ;
                         }
                         cout << ", +" << pot1*(m+1)+pot2*(f) << "\n\n" ;
-                        break ; // ponerle condicion al break para mayores a 18
+                        break ; // ponerle condicion al break para mayores a 18 (ya no)
                     }
-                    // +1
-                    for(int l=0; l<(liters-(pot1*(m+1)+pot2*f)); l++){ // 10, 11
+                    // Completa a partir de la Base con +1 Litros
+                    for(int l=0; l<(liters-(pot1*(m+1)+pot2*f)); l++){
                         Pots.llene(pot1) ;
                         Pots.llene_con(pot1, pot2) ;
                         Pots.bote(pot2) ;
@@ -159,7 +172,6 @@ void PotsWork(int liters){
                         Pots.llene_con(pot1, 0) ;
                         cout << ", +1" << "\n\n" ;
                     }
-                    //cout << ", +" << pot1+liters-pot1*(m+1) << "\n\n" ;
                     break ;
                 }
             }
@@ -169,56 +181,15 @@ void PotsWork(int liters){
     }
     catch(Trabajador::Invalid){
         //error("Invalid date!") ;
-        cout << "Invalid date \n" ;
+        cout << "Error. \n\nConsidere lo siguiente:\nRecipiente1 debe ser mayor que el recipiente2 \nDebe poder hacerse 1 Litro apartir de ambos picheles\n\n" ;
     }
 }
 
 int main()
 {
     // Funcion que llama la clase Trabajador
-    PotsWork(21) ;
+    // void LitrosResultantes(litros_resultantes, capacidad_recipiente1, capacidad_recipiente2);
+    LitrosResultantes(11, 9, 4) ;
 
     return 0 ;
 }
-
-                    //cout << ", +" << pot1+pot2*i << "\n" ;
-/*if((pot1+pot2*i) < liters){  // 7, 8 litros
-    // +BaseMayor
-    Pots.llene(pot1) ;
-    for(int f=0; f<(pot1+pot2*(i+1)); f++){
-        Pots.llene_con(pot1, pot2) ;
-        Pots.bote(pot2) ;
-    }
-    Pots.llene_con(pot1, 0) ;
-    cout << ", +" << pot1+pot2*i << "\n\n" ;
-
-    // +1 litros
-    for(int g=0; g<(liters-(pot1-pot2*i)); g++){
-        Pots.llene(pot1) ;
-        for(int h=0; h<toOne; h++){
-            Pots.llene_con(pot1, pot2) ;
-            Pots.bote(pot2) ;
-        }
-        Pots.llene_con(pot1, 0) ;
-        cout << ", +1 \n" ;
-    }
-    break ;
-}
-else*/
-/*Pots.llene(pot1) ;
-Pots.llene(pot2) ;
-Pots.llene_con(pot1, 0) ;
-Pots.llene_con(pot2, 0) ;
-//Pots.llene_con(pot1, pot2) ;
-//Pots.bote(pot2) ;*/
-/*
-// +1 litros
-for(int g=0; g<(liters-(pot1-pot2*i)); g++){
-    Pots.llene(pot1) ;
-    for(int h=0; h<toOne; h++){
-        Pots.llene_con(pot1, pot2) ;
-        Pots.bote(pot2) ;
-    }
-    Pots.llene_con(pot1, 0) ;
-    cout << ", +1 \n" ;
-}*/
