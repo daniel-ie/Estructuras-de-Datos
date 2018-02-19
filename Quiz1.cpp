@@ -44,25 +44,21 @@ bool Trabajador::is_valid(){ // condiones para validar
 
 // Funcion que llama la Clase y valida
 void PotsWork(int liters){
-    int pot1 = 9, pot2 = 4 ;
+    int pot1 = 11, pot2 = 5 ;
     try{
         Trabajador Pots {pot1, pot2} ;
 
-        bool getout = false ;
-
-        //int thor = ( (pot1-pot2*i) + (pot1-pot2*(i+j))*k ) ;
-
-        int i = 0, j = 0, pot = 0, n = 0, toOne = 0 ;
+        int i = 0, pot = 0, n = 0, toOne = 0 ;
         bool multiplo = false ;
 
-
+/* ------- Calcula las iteraciones para llegar a 1 Litro ---------- */
         while(1){
             if(pot1-pot2*toOne == 1)
                 break ;
             toOne++ ;
         }
 
-/* ------- Prioridad multiplo de algun pichel ---------- */
+/* ------------- Prioridad multiplo de algun pichel --------------- */
         if((liters % pot1) == 0){
             pot = pot1 ;
             n = liters/pot ;
@@ -73,55 +69,52 @@ void PotsWork(int liters){
             n = liters/pot ;
             multiplo = true ;
         }
-        cout << "modulo " << liters % pot2 << "\n" ;
-
+/* ------------ Algoritmo para comandar instrucciones ------------- */
         if(multiplo == true){
             for(i=0; i<n; i++){
-                    Pots.llene(pot) ;
-                    Pots.llene_con(pot, 0) ;
+                Pots.llene(pot) ;
+                Pots.llene_con(pot, 0) ;
             }
             cout << "\n" ;
         }
-/* ---------------------------------------------------- */
+
         if(multiplo == false){
             for(i=0; i<=pot1; i++){
                 if((pot1-pot2*i) < liters){  // 6, 7 litros
-                    // +5 litros
+                    // +BaseMayor
                     Pots.llene(pot1) ;
-                    while(j < i){
+                    for(int f=0; f<(pot1-pot2*(i+1)); f++){
                         Pots.llene_con(pot1, pot2) ;
                         Pots.bote(pot2) ;
-                        j++ ;
                     }
                     Pots.llene_con(pot1, 0) ;
-                    cout << ", +5 \n\n" ;
+                    cout << ", +" << pot1-pot2*i << "\n\n" ;
 
-                    //hacer el calculo para saber cuantos +1 litros se deben completar
+                    // +1 litros
                     for(int g=0; g<(liters-(pot1-pot2*i)); g++){
-                        // +1 litro
                         Pots.llene(pot1) ;
                         for(int h=0; h<toOne; h++){
                             Pots.llene_con(pot1, pot2) ;
                             Pots.bote(pot2) ;
                         }
-                        Pots.llene_con(pot1, 0) ;  // +1 litro
+                        Pots.llene_con(pot1, 0) ;
                         cout << ", +1 \n" ;
                     }
                     break ;
                 }
                 else if((pot1-pot2*i) == liters){  // 5 y 1 litros
                     Pots.llene(pot1) ;
-                    while(j < i){
+                    for(int m=0; m<i; m++){
                         Pots.llene_con(pot1, pot2) ;
                         Pots.bote(pot2) ;
-                        j++ ;
                     }
                     Pots.llene_con(pot1, 0) ;
+                    cout << ", +" << pot1-pot2*i << "\n" ;
                     break ;
                 }
             }
         }
-
+/* ---------------------------------------------------------------- */
 
     }
     catch(Trabajador::Invalid){
@@ -133,7 +126,7 @@ void PotsWork(int liters){
 int main()
 {
     // Funcion que llama la clase Trabajador
-    PotsWork(3) ;
+    PotsWork(7) ;
 
     return 0 ;
 }
