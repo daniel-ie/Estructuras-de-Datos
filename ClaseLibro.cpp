@@ -2,43 +2,44 @@
 
 using namespace std ;
 
+template <class T>
 class Nodo {
 public:
-    int dato ;
-
+    T dato ;
     Nodo *siguiente ;
-    Nodo(int x){
+
+    Nodo(T x){
         dato = x ;
         siguiente = NULL ;
     }
-    Nodo(int x, Nodo *p){
+    Nodo(T x, Nodo *p){
         dato = x ;
         siguiente = p ;
     }
 } ;
 
+template <class T>  
 class ListaSimple {
-    Nodo *pdato ;
+    Nodo<T> *pdato ;
 public:
-    ListaSimple(){
+    ListaSimple<T>(){
         pdato = NULL ;
     }
-
-    void insertar(int x){
-        pdato = new Nodo(x, pdato) ;     // Crea el nodo
+    void insertar(T x){
+        pdato = new Nodo<T>(x, pdato) ;     // Crea el nodo
     }
     void mostrar(){
         cout << "ListaSimple = [" ;
         if(pdato){
             cout << pdato->dato ;
-            for(Nodo *q = pdato->siguiente; q; q = q->siguiente)
+            for(Nodo<T> *q = pdato->siguiente; q; q = q->siguiente)
                 cout << ", " << q->dato ;
         }
         cout << "]\n" ;
     }
     int size(){
         int s = 0 ;
-        for(Nodo *q = pdato; q; q = q->siguiente)
+        for(Nodo<T> *q = pdato; q; q = q->siguiente)
             s += 1 ;
         return s ;
     }
@@ -47,15 +48,17 @@ public:
 
 int main()
 {
-    ListaSimple year = ListaSimple() ;    // Constructor objeto year
-    ListaSimple autor = ListaSimple() ;   // objeto autor       
+    ListaSimple<int> year = ListaSimple<int>() ;    // Constructor objeto year
+    ListaSimple<string> autor = ListaSimple<string>() ;   // objeto autor       
 
     year.insertar(2010) ;
     year.insertar(2017) ;
-    
-    //autor.insertar("Patrick Rothfuss") ;
+
+    autor.insertar("Patrick Rothfuss") ;
+    autor.insertar("Dan Brown") ;
 
     year.mostrar() ;
+    autor.mostrar() ;
 
     return 0 ;
 }
