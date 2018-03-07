@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 using namespace std ;
 
@@ -20,8 +21,10 @@ public:
 class MergeSort {    
 public:
     Nodo *pdatoGlobal ;
-    MergeSort(){
+    int ordenamiento ;
+    MergeSort(int orden){
         pdatoGlobal = NULL ;
+        ordenamiento = orden ;
     }
 
     void push(Nodo **pdato, int dato){
@@ -47,6 +50,10 @@ public:
         cout << "]\n" ;
     }
 
+    void ascendente(){
+
+    }
+
     void mergeSort(Nodo **source){
         Nodo *pdato1 = *source, *a=NULL, *b=NULL ;
         if(pdato1==NULL || pdato1->siguiente==NULL)
@@ -64,14 +71,43 @@ public:
         else if(b == NULL)
             return a ;        
 
-        if(a->dato <= b->dato){
-            mergedList = a ;
-            mergedList->siguiente = mergeLists(a->siguiente, b) ;
+        switch (ordenamiento)
+        {
+        case 1 : //"ascendente" :            
+            // Ordenamiento ascendente
+            if(a->dato <= b->dato){
+                mergedList = a ;
+                mergedList->siguiente = mergeLists(a->siguiente, b) ;
+            }
+            else{
+                mergedList = b ;
+                mergedList->siguiente = mergeLists(a, b->siguiente) ;
+            }
+            break ;
+        case 2 : // "descendente" :
+            // Ordenamietno descendente
+            if(a->dato >= b->dato){
+                mergedList = a ;
+                mergedList->siguiente = mergeLists(a->siguiente, b) ;
+            }
+            else{
+                mergedList = b ;
+                mergedList->siguiente = mergeLists(a, b->siguiente) ;
+            }
+            break ;
+        default:
+            // Ordenamiento ascendente
+            if(a->dato <= b->dato){
+                mergedList = a ;
+                mergedList->siguiente = mergeLists(a->siguiente, b) ;
+            }
+            else{
+                mergedList = b ;
+                mergedList->siguiente = mergeLists(a, b->siguiente) ;
+            }
+            break ; 
         }
-        else{
-            mergedList = b ;
-            mergedList->siguiente = mergeLists(a, b->siguiente) ;
-        }
+
 
         return mergedList ;
     }
@@ -107,14 +143,24 @@ public:
 int main(void)
 {
     Nodo *pdato = NULL ;
-    MergeSort lista = MergeSort() ;
+    MergeSort lista = MergeSort(2) ;
     
-    lista.push(&pdato, 6) ;
-    lista.push(&pdato, 4) ;
+    lista.push(&pdato, 100) ;
+    lista.push(&pdato, 200) ;
+    lista.push(&pdato, 400) ;
+    lista.push(&pdato, 500) ;
+    lista.push(&pdato, 1000) ;
+    lista.push(&pdato, 2000) ;
+    lista.push(&pdato, 5000) ;
+    lista.push(&pdato, 10000) ;
+    lista.push(&pdato, 20000) ;
+    lista.push(&pdato, 40000) ;
+    lista.push(&pdato, 50000) ;
+    lista.push(&pdato, 100000) ;
+
 
     lista.printList(lista.pdatoGlobal) ;
-
-    lista.mergeSort(&lista.pdatoGlobal) ;
+    lista.mergeSort(&lista.pdatoGlobal) ; //"descendente") 
     lista.printList(lista.pdatoGlobal) ;
  
     return 0;
