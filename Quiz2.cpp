@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <stdlib.h>
 
 using namespace std ;
 
@@ -22,10 +23,32 @@ class MergeSort {
 public:
     Nodo *pdatoGlobal ;
     int ordenamiento ;
-    MergeSort(int orden){
+    MergeSort(){
         pdatoGlobal = NULL ;
-        ordenamiento = orden ;
     }
+ 
+    int genere(Nodo **pdato, int n, int tipo){
+        Nodo *pdatoX = NULL ;
+        ordenamiento = tipo ;
+        switch(tipo){
+            case 1: // ascendente
+                for(int i=0; i<n; i++)                                     
+                    push(&pdatoX, i) ;                
+                break ;
+            case 2: // descendente
+                for(int i=n-1; i>=0; i--)
+                    push(&pdatoX, i) ;
+                break ;
+            case 3: ///aleatoria
+                for(int i=0; i<n; i++)
+                    push(&pdatoX, rand()%n) ;
+                break ;
+            default: // ascendente
+                for(int i=0; i<n; i++)
+                    push(&pdatoX, i) ;                   
+                break ;
+        }
+    } 
 
     void push(Nodo **pdato, int dato){
         Nodo *newNode = new Nodo(dato) ;
@@ -48,11 +71,7 @@ public:
                 cout << ", " << q->dato ;
         }
         cout << "]\n" ;
-    }
-
-    void ascendente(){
-
-    }
+    } 
 
     void mergeSort(Nodo **source){
         Nodo *pdato1 = *source, *a=NULL, *b=NULL ;
@@ -71,44 +90,15 @@ public:
         else if(b == NULL)
             return a ;        
 
-        switch (ordenamiento)
-        {
-        case 1 : //"ascendente" :            
-            // Ordenamiento ascendente
-            if(a->dato <= b->dato){
-                mergedList = a ;
-                mergedList->siguiente = mergeLists(a->siguiente, b) ;
-            }
-            else{
-                mergedList = b ;
-                mergedList->siguiente = mergeLists(a, b->siguiente) ;
-            }
-            break ;
-        case 2 : // "descendente" :
-            // Ordenamietno descendente
-            if(a->dato >= b->dato){
-                mergedList = a ;
-                mergedList->siguiente = mergeLists(a->siguiente, b) ;
-            }
-            else{
-                mergedList = b ;
-                mergedList->siguiente = mergeLists(a, b->siguiente) ;
-            }
-            break ;
-        default:
-            // Ordenamiento ascendente
-            if(a->dato <= b->dato){
-                mergedList = a ;
-                mergedList->siguiente = mergeLists(a->siguiente, b) ;
-            }
-            else{
-                mergedList = b ;
-                mergedList->siguiente = mergeLists(a, b->siguiente) ;
-            }
-            break ; 
+        // Ordenamiento ascendente
+        if(a->dato <= b->dato){
+            mergedList = a ;
+            mergedList->siguiente = mergeLists(a->siguiente, b) ;
         }
-
-
+        else{
+            mergedList = b ;
+            mergedList->siguiente = mergeLists(a, b->siguiente) ;
+        }
         return mergedList ;
     }
 
@@ -128,7 +118,6 @@ public:
                     fast = fast->siguiente;
                 }
             }
-
             *front = pdato ;
             *back = slow->siguiente ;
             slow->siguiente = NULL ;
@@ -142,35 +131,17 @@ public:
 
 int main(void)
 {
+
+/***** Algoritmo de ordenamiento MergeSort por listas enlazadas *****/
     Nodo *pdato = NULL ;
-    MergeSort lista = MergeSort(2) ;
-    
-    lista.push(&pdato, 100) ;
-    lista.push(&pdato, 200) ;
-    lista.push(&pdato, 400) ;
-    lista.push(&pdato, 500) ;
-    lista.push(&pdato, 1000) ;
-    lista.push(&pdato, 2000) ;
-    lista.push(&pdato, 5000) ;
-    lista.push(&pdato, 10000) ;
-    lista.push(&pdato, 20000) ;
-    lista.push(&pdato, 40000) ;
-    lista.push(&pdato, 50000) ;
-    lista.push(&pdato, 100000) ;
+    MergeSort lista = MergeSort() ;
 
-
+    //ordenamientos: ascendente=1, descendente=2, aleatorio=3   
+    lista.genere(&pdato, 100, 3) ;  // (punteroRef, num datos, ordenamiento)
     lista.printList(lista.pdatoGlobal) ;
-    lista.mergeSort(&lista.pdatoGlobal) ; //"descendente") 
+
+    lista.mergeSort(&lista.pdatoGlobal) ; // ordena ascendentemente
     lista.printList(lista.pdatoGlobal) ;
  
     return 0;
 }
-
-// *head = head in the main function,
-// it is only there to connect the two and
-// not let make the function return anything
-// passed by reference
-// globalHead points to the start of the linked list
-// if you are passing the address over here you have to
-// make a double pointer over there in the function
- 
