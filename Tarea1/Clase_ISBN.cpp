@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <stdlib.h>
 
 using namespace std ;
 
@@ -22,67 +24,120 @@ public:
 template <class T>  
 class ISBN {
 private:
-    int pref, reg, edit, elem, verif ;
+    int pref, reg, edit, elem, verif ;    
+    int sumP=0, sumI=0 ;
+    string ss ; //, ss13, ss10 ;
 public:
     /***** constructores *****/
-
+    
     // ISBN 13 digitos
-    /*ISBN<T>(int pref, int reg, int edit, int elem, int verif){
+    ISBN<T>(int p, int r, int e, int el){
+        pref = p ; reg = r ; edit = e ; elem = el ;                
+        int2str(p) ; // EDITANDO LOS PARAMETROS A CONVERTIR
+        sum_Pares_Impares() ;        
+        verificador13() ;
     }
     // ISBN 10 digitos
-    ISBN<T>(int reg, int edit, int elem, int verif){
-    }*/
-    int sumP=0, sumI=0 ;
-    ISBN<T>(){
+    ISBN<T>(int r, int e, int el){
+        reg = r ; edit = e ; elem = el ;
+        int2str(r) ;
+        verificador10() ;
     }
-
-    void verificador13(int n){
-        sum_Pares_Impares(n) ;        
-        verif = 10 - (sumP*3+sumI)%10 ;        
-        cout << "verficador=" << verif << endl ;
+    void int2str(int x){                
+        stringstream convert ;
+        int y = x ;
+        convert << x ;      // convierte entero a string
+        ss = convert.str() ;
+        cout << "pref str = " << ss << endl ;
     }
-    void verificador10(int n){
-        int i, sum=0 ;
-        for(i=9; n>0; i--){
-            sum += i * (n%10) ;            
-            n /= 10 ;               
+    void sum_Pares_Impares(){
+        for(int i=0; i<ss.length(); i++){
+            if(i%2 == 0)
+                sumP += ss[i] - '0';
+            else
+                sumI += ss[i] - '0' ; // esta agarrando null
         }    
-        sum %= 11 ;
-        //cout << "verif10=" << sum << endl ;
+        cout << "pares=" << sumP << endl ;
+        cout << "impares=" << sumI << endl ;
     }
+    void verificador13(){               
+        verif = 10 - (sumP*3+sumI)%10 ;        
+        cout << "verficador13=" << verif << endl ;
+    }
+    void verificador10(){
+        cout << "ss= " << ss << endl ;
+        int temp = 0 ;
+        for(int i=0; i<ss.length(); i++){            
+            char c = ss[i]-'0' ;
+            temp += c*(i+1) ;            
+        }        
+        verif = temp ;    
+        verif %= 11 ;   // agregar condicion if(verif==10) verif=0 ;
+        cout << "New_verificador10=" << verif << endl ;        
+    }
+    /*int str2int(string s){
+        stringstream convert ;
+        int x ;
+        convert.str(s) ;
+        convert >> x ;
+        return x ;
+    }*/ 
 
-    // Obtiene sumatoria de posiciones pares e impares del numero ingresado
-    void sum_Pares_Impares(int n){        
+} ;
+
+
+int main()
+{
+    //ISBN<int> isbn13 = ISBN<int>(int pref, int reg, int edit, int elem, int verif) ;    // Constructor objeto year
+    //ISBN<int> isbn10 = ISBN<int>(int reg, int edit, int elem, int verif) ;   // objeto autor       
+    
+    //ISBN<int> isbn = ISBN<int>(8, 399, 534, 397) ;
+    ISBN<int> isbn = ISBN<int>(19, 534, 37397) ;
+
+    isbn ;
+
+    return 0 ;
+}
+
+
+
+
+    /*
+    void sum...
         int i ;
         for(i=0; n>0; i++){
             if(i%2 == 0)
                 sumP += n%10 ;
             else
                 sumI += n%10 ; 
-            n /= 10 ;               
-        }        
+            n /= 10 ;
+        }
         if(i%2 == 0) // ajusta si el length del int es impar
             intercambie(sumP, sumI) ; 
     }
-
     void intercambie(int &var1, int &var2){
         int temp = var1 ;
         var1 = var2 ;
         var2 = temp ;
     }
 
-} ;
- 
 
-int main()
-{
-    //ISBN<int> isbn13 = ISBN<int>(int pref, int reg, int edit, int elem, int verif) ;    // Constructor objeto year
-    //ISBN<int> isbn10 = ISBN<int>(int reg, int edit, int elem, int verif) ;   // objeto autor       
-    ISBN<int> isbn = ISBN<int>() ;
-
-    isbn.verificador10(1111111111) ;// 102 revisar para v=10
-
-    //cout << "suma = " << sum << endl ;
-    
-    return 0 ;
-} 
+    void verificador10(){        
+        int i, verif=0 ;
+        for(i=9; n>0; i--){
+            verif += i * (n%10) ;            
+            n /= 10 ;               
+        }
+        verif %= 11 ;
+        cout << "verificador10=" << verif << endl ;
+    }    
+    int getOneInt10(){
+        n = reg*100000000 + edit*100000 + elem*1 ;    
+        cout << "getOneInt10=" << n << endl ;        
+        return n ;
+    }
+    int getOneInt13(){
+        n = pref*1000000000 + reg*100000000 + edit*100000 + elem*1 ;
+        cout << "getOneInt13=" << n << endl ;        
+        return n ;
+    }*/   
