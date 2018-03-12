@@ -10,10 +10,10 @@ class ISBN {
 private:
     //int pref, reg, edit, elem, verif ;
     int sumP, sumI;
-    string ss, ss1 ; //, temp ;
+    string ss ;
      // estructura para los parámetros
     struct ISBNparams{
-        string dato, datoAll ;
+        string dato ; //, datoAll ;
         int datoInt, datoAllInt ;
     } ;
     // Arreglo para mantener los parametros disponibles
@@ -29,8 +29,9 @@ public:
         id = new ISBNparams[n] ;
         loadParams() ;
         printParams() ;
-        verificador10digitos() ;
-        addVerificador() ;
+        string v = verificador10digitos() ;
+        insertVerificador(v) ;
+        printParams() ;
         // AGREGAR EL VERIFICADOR A LA COLA DE LOS PARAMETROS
     }
     void loadParams(){
@@ -69,18 +70,24 @@ public:
     string verificador10digitos(){
         int temp=0 ; string s_temp ;
         for(int i=0; i<nn-1; i++){            
-            temp += id[i].datoAllInt*(i+1) ;    // obtiene digito por digito            
-            cout << "temp1=" << temp << endl ;  //  id[i].datoAllInt << endl ;            
-        }                                       // agregar condicion if(verif==10) verif=0 ;        
-        cout << "Sumatoria para v10 = " << temp << endl ;
+            temp += id[i].datoAllInt*(i+1) ;      // obtiene digito por digito
+            //cout << "temp1=" << temp << endl ;  //  id[i].datoAllInt << endl ;
+        }
+        //cout << "Sumatoria para v10 = " << temp << endl ;
         temp %= 11 ;
         temp = temp!=10 ? temp : 0 ; // CONSULTAR QUE PASA CON DIGITO = 10
         s_temp = int2str(temp) ;
-        cout << "Verificador de 10 digitos = " << s_temp << endl ;
+        //cout << "Verificador de 10 digitos = " << s_temp << endl ;
         return s_temp ;
     }
-    void addVerificador(){
-
+    void insertVerificador(string s){
+        char c = s[0] ;
+        int x = str2int(s) ;
+        id[n].dato = s ;
+        id[n].datoInt = x ;
+        id[nn].datoAllInt = c - '0' ;
+        n +=1 ;
+        nn += 1 ;
     }
     int str2int(string s){
         stringstream convert ;
@@ -117,7 +124,7 @@ public:
 int main()
 {
 
-    ISBN isbn = ISBN("6231") ;
+    ISBN isbn = ISBN("62-551") ;
 
     isbn ;
     //isbn.printParam() ;
