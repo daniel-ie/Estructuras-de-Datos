@@ -149,15 +149,15 @@ public:
             temp += id[i].datoAllInt*(i+1) ;  // escala digito por digito
         }        
         temp %= 11 ;
-        temp = temp!=10 ? temp : 0 ; // CONSULTAR QUE PASA CON DIGITO = 10
+        temp = temp!=10 ? temp : 1 ; // CONSULTAR QUE PASA CON DIGITO = 10
         verif = temp ;                        // actualiza la variable global verif
         s_temp = int2str(temp) ;
         cout << "Verificador de 10 digitos = " << s_temp << endl ;
         return s_temp ;
     }    
     string verificador13digitos(int pares, int impares){
-        int temp = 10 - (pares*3+impares)%10 ;
-        temp = temp!=10 ? temp : 0 ; // CONSULTAR QUE PASA CON DIGITO = 10
+        int temp = 10 - (pares+impares*3)%10 ;
+        temp = temp!=10 ? temp : 1 ; // CONSULTAR QUE PASA CON DIGITO = 10
         cout << "Verficador para tipo 13 digitos = " << temp << endl ;
         verif = temp ;                        // actualiza la variable global verif
         string verif13 = int2str(temp) ;
@@ -193,7 +193,9 @@ public:
 
 int main()
 {
-    ISBN isbn = ISBN("1-534-37397-9") ;
+    //ISBN isbn = ISBN("978-84-481-5645") ;
+    ISBN isbn = ISBN("978-84-8181-227") ;
+    //ISBN isbn = ISBN("84-8181-227") ;
     //ISBN isbn = ISBN(1, 534, 37397, 9) ;   // 13 digitos
     //ISBN isbn = ISBN(534, 37397, 9) ;
     
