@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>  // writer
 
 using namespace std ;
 
@@ -29,15 +30,23 @@ public:
 
 class Book {
     Nodo *pdato ;
-
+    string isbnB, tituloB, autorB, yearB, cantidadB ;
 public:
     Book(){
         pdato = NULL ;
     }
     Book(string isbnS, string tituloS, string autorS, string yearS, string cantidadS){
-        pdato = NULL ;       
+        pdato = NULL ;   
+        
+        isbnB = isbnS ;
+        tituloB = tituloS ;
+        autorB = autorS ;
+        yearB = yearS ;
+        cantidadB = cantidadS ;  
+
         insertar(isbnS, tituloS, autorS, yearS, cantidadS) ;
         mostrar() ;
+        //buffering() ;
     }
     void insertar(string s1, string s2, string s3, string s4, string s5){
         pdato = new Nodo(s1, s2, s3, s4, s5, pdato) ;
@@ -51,9 +60,50 @@ public:
         }
         cout << "]\n" ;
     }
+    string buffering(){
+        string buffer ;
+        buffer += isbnB ; buffer += " " ;
+        buffer += tituloB ; buffer += " " ;
+        buffer += autorB ; buffer += " " ;
+        buffer += yearB ; buffer += " " ;
+        buffer += cantidadB ; buffer += " " ;
+        return buffer ; 
+    }
 
 } ;
 
+class FileReader {
+    const char *BD_file = "text.txt" ;
+    string buffer ;
+public:
+    FileReader(string s){
+        buffer = s ;
+        writer() ;
+        reader() ;
+    } ;
+
+    void writer(){
+        ofstream BD(BD_file) ;
+        if(BD.is_open()){
+            BD << buffer  ; //"Hola soberanos! Saludos y congratulaciones!" ;
+            BD.close() ;
+        }
+        else
+            cout << "Can't open file" << endl;    
+    }
+    void reader(){
+            ifstream BD(BD_file) ;
+            string line ;           
+            if(BD.is_open()){
+                while(getline(BD,line))
+                    cout << line << endl ;
+                BD.close();
+            }
+            else
+                cout << "Can't open file" << endl ;
+    }
+
+} ;
 
 int main()
 {
@@ -61,7 +111,11 @@ int main()
     book = Book("0-534-37398-9", "Fortaleza digital", "Dan Brown", "2001", "1") ;
     
     book ; 
-    
+
+    FileReader fr = FileReader(book.buffering()) ;    
+    fr ;    
+
+
     return 0 ;
 } 
     /*void borrar(string s){
