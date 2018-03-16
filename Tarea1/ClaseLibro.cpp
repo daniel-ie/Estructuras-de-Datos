@@ -66,24 +66,24 @@ public:
         buffer += tituloB ; buffer += " " ;
         buffer += autorB ; buffer += " " ;
         buffer += yearB ; buffer += " " ;
-        buffer += cantidadB ; buffer += " " ;
+        buffer += cantidadB ; buffer += "\n" ;
         return buffer ; 
     }
 
 } ;
 
 class FileReader {
-    const char *BD_file = "text.txt" ;
+    const char *BD_file ;
     string buffer ;
 public:
-    FileReader(string s){
-        buffer = s ;
-        writer() ;
+    FileReader(){
+        BD_file = "text.txt" ;
         reader() ;
     } ;
 
-    void writer(){
-        ofstream BD(BD_file) ;
+    void writer(string s){
+        string buffer = s ;
+        ofstream BD(BD_file, ios_base::app) ;
         if(BD.is_open()){
             BD << buffer  ; //"Hola soberanos! Saludos y congratulaciones!" ;
             BD.close() ;
@@ -105,19 +105,22 @@ public:
 
 } ;
 
+
 int main()
 {
-    Book book = Book("0-534-37397-9", "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;
-    book = Book("0-534-37398-9", "Fortaleza digital", "Dan Brown", "2001", "1") ;
+    FileReader fr = FileReader() ;    
+    Book book = Book() ;
+
+    book = Book("0-534-37397-9", "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;
+    fr.writer(book.buffering()) ;
     
-    book ; 
-
-    FileReader fr = FileReader(book.buffering()) ;    
-    fr ;    
-
-
+    book = Book("0-534-37398-9", "Fortaleza digital", "Dan Brown", "2001", "1") ;
+    fr.writer(book.buffering()) ;
+    
+     
     return 0 ;
 } 
+
     /*void borrar(string s){
         Nodo *temp = pdato ;
         if(pdato){
