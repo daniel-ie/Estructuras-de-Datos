@@ -117,7 +117,7 @@ public:
             nn = k ;
         }
         id[0].datoAllStr = temp1 ;              // load all params in one string
-        cout << "Todos los parametros en un string = " << temp1 << endl << endl ;
+        //cout << "Todos los parametros en un string = " << temp1 << endl << endl ;
     }
     void printParams(){
         cout << "Parametros concatenados en un solo string " << endl << "\t> " ;
@@ -265,6 +265,9 @@ public:
         buffer += cantidadB ; buffer += "\n" ;
         return buffer ; 
     }
+    string getISBN(){
+        return isbnB ;
+    }
 
 } ;
 
@@ -388,7 +391,7 @@ public:
         return r ;
     }
 
-} ; 
+} ;
 
 
 int main()
@@ -397,13 +400,19 @@ int main()
     Book book = Book() ;
     Queue queue = Queue() ;
     ISBN isbn = ISBN() ;
-    isbn = ISBN("978-84-8181-227") ;
-    
-    queue.insert("16-241-54-000", "javier") ;       
-    queue.mostrar() ;
+
 
     book = Book("0-534-37397-9", "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;
-    fr.writer(book.buffering()) ;
+    isbn = ISBN(book.getISBN()) ;   // Calcula el digito verificador
+    fr.writer(book.buffering()) ;   // Escribe en el .txt
+
+    //book = Book("0-534-37397-9", "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;
+    //isbn = ISBN(book.getISBN()) ;   // Calcula el digito verificador
+    //fr.writer(book.buffering()) ;   // Escribe en el .txt
+
+
+    queue.insert("0-534-37397-9", "javier") ;
+    queue.mostrar() ;  
        
 
     return 0 ;
