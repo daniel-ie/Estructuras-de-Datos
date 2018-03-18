@@ -117,10 +117,4 @@ public:
 };/* Esto es para el momento en que vaya a juntarlo, en cada uno de los casos se deben hacer todos los importes de todos los .h del programa y
      con una variable de cada tipo hacer el llamado, junto a un contador de variables de cada tipo 1 x tipo*/
 
-/*int main(){
 
-    cmd<T> a= cmd("sort");
-    a.cargarM(a);
-    a.mostrarM();
-    return 0;
-}*/
