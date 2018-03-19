@@ -390,6 +390,7 @@ public:
 
 class FileReader {
     const char *BD_file ;
+    string isbn, titulo, autor, year, cantidad, content ;
     string buffer ;
 public:
     FileReader(const char *file){
@@ -418,31 +419,6 @@ public:
             else
                 cout << "Can't open file" << endl ;
     }
-    /*void getAtribute(){
-        string isbn, titulo, autor, year, cantidad, param ;     
-        ifstream BD(BD_file) ;
-        if(BD.is_open()){
-            while(getline(BD, param)){ // get the line
-                    getline(BD, param, ',') ;   // isbn                    
-                    cout << param << endl ;
-                    getline(BD, param, ',') ;   // titulo
-                    cout << param << endl ;
-                    getline(BD, param, ',') ;   // autor                 
-                    cout << param << endl ;
-                    getline(BD, param, ',') ;   // year         
-                    cout << param << endl ;
-                    getline(BD, param, ',') ;   // cantidad 
-                    cout << param << endl ;
-                    //Book book = Book(isbn, titulo, autor, year, cantidad) ;
-                    //MStorage mStorage = MStorage(book) ;
-
-            }
-            BD.close();                
-        }
-        else
-            cout << "Can't open file" << endl ;            
- 
-    }*/
     string getBuffer(){
             ifstream BD(BD_file)  ;
             string buffer, line   ;
@@ -457,25 +433,77 @@ public:
                 cout << "Can't open file" << endl ;
         return buffer ;
     }
+/*    string parser(string buf){
+        content = buf ;
+        isbn = "" ; titulo = "" ; autor = "" ; year = "" ; cantidad = "" ;
+        int i=0, j=0 ;
+
+        for(i=0, j=0; i<buf.length(); i++){            
+            if(content[i] != ','){
+                if(j == 0)
+                    isbn        += content[i] ; // +1 debido al espacio despues de la coma                
+                else if(j == 1)
+                    titulo      += content[i] ;
+                else if(j == 2)
+                    autor       += content[i] ;                
+                else if(j == 3)
+                    year        += content[i] ;                
+                else if(j == 4)
+                    cantidad    += content[i] ;             
+            }
+            else{
+                if(content[i+1] == ' ')  // equivalente a: ', '
+                    i++ ;
+                j++ ;
+            }
+            if(content[i+1] == '\n')     
+                break ;                            
+        }
+        size_t pos = buf.find('\n') ;
+        string r = buf.erase(0, pos+1) ;
+        return r ;
+    }
+    string getIsbn(){
+        return isbn ;
+    }
+    string getTitulo(){
+        return titulo ;
+    }
+    string getAutor(){
+        return autor ;
+    }
+    string getYear(){
+        return year ;
+    }
+    string getCantidad(){
+        return cantidad ;
+    } */
 
 } ;
 
-class MStorage{
-    vector<Book> storage ;
-
-
+class MStorage : public Book{
+    /*Book book ;
+    vector<Book> storage ;    
+    Book *pStorage = storage.data() ; */
     string isbn, titulo, autor, year, cantidad, content ;
 public:
-    MStorage(){}
-    ~MStorage(){}
-    int x=0 ;
-    MStorage(Book object){       
-        storage.push_back(object) ; x++ ;
-        if(x=0){
-            storage.push_back(object) ;
-        }
+    MStorage():Book(){
+        /*Book book = Book() ;
+        vector<Book> storage(100) ; // storage.resize(100) ;
+        Book *pStorage = storage.data() ; */       
     }
-
+ 
+    /*void store(string buffer){
+        Book book ;
+        for(int i=0; buffer != ""; i++){
+            buffer = parser(buffer) ;  
+            if(buffer == "")
+                break ;      
+            book = Book(getIsbn(), getTitulo(), getAutor(), getYear(), getCantidad()) ;    
+            pStorage[i] = book ;
+            cout << "ISBN's = " << (storage.begin()+i)->getIsbn() << endl ;
+        }        
+    }*/
     string parser(string buf){
         content = buf ;
         isbn = "" ; titulo = "" ; autor = "" ; year = "" ; cantidad = "" ;
@@ -506,7 +534,6 @@ public:
         string r = buf.erase(0, pos+1) ;
         return r ;
     }
-
     string getIsbn(){
         return isbn ;
     }
@@ -521,13 +548,13 @@ public:
     }
     string getCantidad(){
         return cantidad ;
-    }                
-   
-    void MStoragePrint(){
+    }               
+
+    /*void MStoragePrint(){
         vector<Book>::iterator i ;
-        vector<Book>::iterator j ;
+        //vector<Book>::iterator j ;
         cout << "\nOutput from MStorage Class: " << endl ;        
-        cout << "size = " << storage.size()  << endl;
+        //cout << "size = " << storage.size()  << endl;
         //for(j=0; j<3;j++){
             for (i = storage.begin(); i != storage.end(); ++i){
                 cout << "[" ;
@@ -537,10 +564,17 @@ public:
                 cout << i->getYear()     << ", " ;
                 cout << i->getCantidad() ;
                 cout << "]" << endl ;
-            }
-        
-    }
+            }        
+    }*/
 
+    void setIsbn(string isbnM){isbn = isbnM ;}
+    void setTitulo(string tituloM){titulo = tituloM ;}
+    void setAutor(string autorM){autor = autorM ;}
+    void setYear(string yearM){year = yearM ;}
+    void setCantidad(string cantidadM){cantidad = cantidadM ;}
+
+
+    ~MStorage(){}
 };
  
 //------------------------------------------------------------------------------------------------------------------------
@@ -550,39 +584,24 @@ public:
 
 int main()
 {
-    cout << "***** Creando Books en un 'storage' de prueba *****" << endl;
-    int storage_size=3;
-    //Book storage[storage_size];
-    //storage[0]=Book("0-534-37397-9", "Nombre del viento", "Patri Rothfuss", "2001", "3") ;
-    //storage[1]=Book("1-534-37397-9", "Nombre del agua", "Patric Rothfuss", "2003", "3") ;
-    //storage[2]=Book("2-534-37397-9", "Nombre del plasma", "Patrick Rothfuss", "2001", "3") ;
-    //cout << "------------------------------------" << endl << endl ;
-    
+    vector<Book> storage(100) ;
+    Book *pStorage = storage.data() ;
+
     FileReader fr = FileReader("text1.txt") ;
-    
-    string buffer = fr.getBuffer() ;
-
-    cout << buffer  << endl ;
-
     Book book = Book() ;
-    MStorage mStorage = MStorage() ;
-    
-    
-//while(buffer != ""){
-  
-    buffer = mStorage.parser(buffer) ;
-    //if(buffer == "")
-      //  break ;
+    MStorage mStorage = MStorage() ; 
+    string buffer = fr.getBuffer() ; //mStorage.store(buffer) ;
 
-    cout << "Book= [" << mStorage.getIsbn() << ", " << mStorage.getTitulo() << ", " ;
-    cout << mStorage.getAutor() << ", " << mStorage.getYear() << ", " << mStorage.getCantidad() << "]" << endl ;
-    
-    book = Book(mStorage.getIsbn(), mStorage.getTitulo(), mStorage.getAutor(), mStorage.getYear(), mStorage.getCantidad()) ;
-    
-    mStorage = MStorage(book) ;
-    mStorage.MStoragePrint()  ;
-
-    cout << "*********************" << endl ;
+    for(int i=0; buffer != ""; i++){
+        buffer = mStorage.parser(buffer) ;  
+        if(buffer == "")
+            break ;      
+        book = Book(mStorage.getIsbn(), mStorage.getTitulo(), mStorage.getAutor(), mStorage.getYear(), mStorage.getCantidad()) ;    
+        pStorage[i] = book ;
+        cout << "ISBN's = " << (storage.begin()+i)->getIsbn() << endl ;
+    }
+ 
+    cout << "*********************" << endl ; //mStorage.MStoragePrint()  ;
  
 
     return 0 ;
