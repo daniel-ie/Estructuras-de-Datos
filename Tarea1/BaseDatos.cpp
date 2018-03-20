@@ -6,6 +6,11 @@
 #include <stdlib.h>
 #include <vector>
 
+#include "ISBNRef.h"
+#include "Nodo1.h"
+#include "Index.h"
+#include "IndexVal.h"
+
 using namespace std ;
 //using std::string ;
 
@@ -341,12 +346,12 @@ public:
             final = pdato ;
         }
     }
-    void mostrar(){ // será el comando queue
+    void mostrar(int count){ // será el comando queue
         if(final == NULL){
             cout << "list is empty" << endl  ;
             return ;
         }
-        string stockResult = stock() ;
+        string stockResult = inStock(count) ;
         pdato = final->siguiente ;
 
         cout << "ISBN     " << string(15, ' ') ;
@@ -366,19 +371,21 @@ public:
         cout << endl ;
 
     }
-    string stock(){
+    string inStock(int count){
         // cada vez que se hace solicitud de libro debe entrar a resultado y revisar si en la lista hace match con isbn
-        int ejemplares = 0 ;
-        string r ;
+        /*int ejemplares = 0 ;
+        
         pdato = final->siguiente ;
         while(pdato != final){          // ESTE VIENE DE LA BD EN REALIDAD
             pdato = pdato->siguiente ;
             if(pdato->isbn == isbnQ){   // revisa el stock
                 ejemplares++ ;
             }
-        }
+        }*/
         // ***EDITAR: 0 CORRESPONDE AL NUMERO DE LIBROS DISPONIBLES QUE SE OBTINEE DE LA BD (.txt)
-        if(ejemplares > 1)
+        //int cantidad = count ;   
+        string r ;
+        if(count > 0)
             r = "Asignado" ;
         else
             r = "No asignado" ;
@@ -433,77 +440,15 @@ public:
                 cout << "Can't open file" << endl ;
         return buffer ;
     }
-/*    string parser(string buf){
-        content = buf ;
-        isbn = "" ; titulo = "" ; autor = "" ; year = "" ; cantidad = "" ;
-        int i=0, j=0 ;
-
-        for(i=0, j=0; i<buf.length(); i++){            
-            if(content[i] != ','){
-                if(j == 0)
-                    isbn        += content[i] ; // +1 debido al espacio despues de la coma                
-                else if(j == 1)
-                    titulo      += content[i] ;
-                else if(j == 2)
-                    autor       += content[i] ;                
-                else if(j == 3)
-                    year        += content[i] ;                
-                else if(j == 4)
-                    cantidad    += content[i] ;             
-            }
-            else{
-                if(content[i+1] == ' ')  // equivalente a: ', '
-                    i++ ;
-                j++ ;
-            }
-            if(content[i+1] == '\n')     
-                break ;                            
-        }
-        size_t pos = buf.find('\n') ;
-        string r = buf.erase(0, pos+1) ;
-        return r ;
-    }
-    string getIsbn(){
-        return isbn ;
-    }
-    string getTitulo(){
-        return titulo ;
-    }
-    string getAutor(){
-        return autor ;
-    }
-    string getYear(){
-        return year ;
-    }
-    string getCantidad(){
-        return cantidad ;
-    } */
 
 } ;
 
-class MStorage : public Book{
-    /*Book book ;
-    vector<Book> storage ;    
-    Book *pStorage = storage.data() ; */
+class MStorage : public Book{ 
     string isbn, titulo, autor, year, cantidad, content ;
 public:
-    MStorage():Book(){
-        /*Book book = Book() ;
-        vector<Book> storage(100) ; // storage.resize(100) ;
-        Book *pStorage = storage.data() ; */       
+    MStorage():Book(){     
     }
  
-    /*void store(string buffer){
-        Book book ;
-        for(int i=0; buffer != ""; i++){
-            buffer = parser(buffer) ;  
-            if(buffer == "")
-                break ;      
-            book = Book(getIsbn(), getTitulo(), getAutor(), getYear(), getCantidad()) ;    
-            pStorage[i] = book ;
-            cout << "ISBN's = " << (storage.begin()+i)->getIsbn() << endl ;
-        }        
-    }*/
     string parser(string buf){
         content = buf ;
         isbn = "" ; titulo = "" ; autor = "" ; year = "" ; cantidad = "" ;
@@ -549,24 +494,7 @@ public:
     string getCantidad(){
         return cantidad ;
     }               
-
-    /*void MStoragePrint(){
-        vector<Book>::iterator i ;
-        //vector<Book>::iterator j ;
-        cout << "\nOutput from MStorage Class: " << endl ;        
-        //cout << "size = " << storage.size()  << endl;
-        //for(j=0; j<3;j++){
-            for (i = storage.begin(); i != storage.end(); ++i){
-                cout << "[" ;
-                cout << i->getIsbn()     << ", " ; 
-                cout << i->getTitulo()   << ", " ;
-                cout << i->getAutor()    << ", " ;
-                cout << i->getYear()     << ", " ;
-                cout << i->getCantidad() ;
-                cout << "]" << endl ;
-            }        
-    }*/
-
+ 
     void setIsbn(string isbnM){isbn = isbnM ;}
     void setTitulo(string tituloM){titulo = tituloM ;}
     void setAutor(string autorM){autor = autorM ;}
@@ -581,28 +509,41 @@ public:
 
 
 
-
 int main()
 {
     vector<Book> storage(100) ;
-    Book *pStorage = storage.data() ;
+    Book *pStorage = storage.data() ; int i=0 ;
 
     FileReader fr = FileReader("text1.txt") ;
     Book book = Book() ;
     MStorage mStorage = MStorage() ; 
-    string buffer = fr.getBuffer() ; //mStorage.store(buffer) ;
+    Queue queue = Queue() ;
 
-    for(int i=0; buffer != ""; i++){
+/***************** Carga la BD ********************/
+    string buffer = fr.getBuffer() ;  
+    for(i=0; buffer != ""; i++){
         buffer = mStorage.parser(buffer) ;  
         if(buffer == "")
             break ;      
         book = Book(mStorage.getIsbn(), mStorage.getTitulo(), mStorage.getAutor(), mStorage.getYear(), mStorage.getCantidad()) ;    
         pStorage[i] = book ;
-        cout << "ISBN's = " << (storage.begin()+i)->getIsbn() << endl ;
+        //cout << "ISBN's = " << (storage.begin()+i)->getIsbn() << endl ;
     }
- 
-    cout << "*********************" << endl ; //mStorage.MStoragePrint()  ;
- 
+ /*************************************************/  
+
+/*** Cola que maneja las solicitudes de libros ****/
+    int cant = 0 ;
+    string queue_isbn = "1-534-37397-9" ;
+    string queue_user = "javier" ;    
+    queue.insert(queue_isbn, queue_user) ;
+    for(int j=0; j<i ; j++){
+        //cout << "ISBN ::: " << (storage.begin()+j)->getIsbn() << endl ;
+        if((storage.begin()+j)->getIsbn() == queue_isbn){
+            cant += 1 ;//cout << "Success!" << endl ;
+        }
+    }    
+    queue.mostrar(cant) ;     
+/*************************************************/ 
 
     return 0 ;
 }
