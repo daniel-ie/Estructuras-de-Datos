@@ -304,95 +304,6 @@ public:
 } ;
 
 
-class Queue {
-    Nodo *pdato ;
-    Nodo *frente ;
-    Nodo *final ;
-    string isbnQ, userQ ;
-public:
-    class Invalid{} ;
-
-    Queue(){
-        pdato = NULL ;
-        frente = NULL ;
-        final = NULL ;
-    }
-    Queue(string isbnS, string userS){
-        pdato = NULL ;
-        frente = NULL ;
-        final = NULL ;
-
-        isbnQ = isbnS ;
-        userQ = userS ;
-
-        //stock() ;
-        //insert() ; //isbnQ, userQ) ;
-        //mostrar() ;
-    }
-
-    void insert(string s1, string s2){
-        isbnQ = s1 ;
-        userQ = s2 ;
-
-        pdato = new Nodo(isbnQ, userQ, pdato) ;
-        pdato->isbn = isbnQ ; pdato->user = userQ ;
-        if(final == NULL){
-            final = pdato ;
-            pdato->siguiente = final ;
-        }
-        else{
-            pdato->siguiente = final->siguiente ;
-            final->siguiente = pdato ;
-            final = pdato ;
-        }
-    }
-    void mostrar(int count){ // será el comando queue
-        if(final == NULL){
-            cout << "list is empty" << endl  ;
-            return ;
-        }
-        string stockResult = inStock(count) ;
-        pdato = final->siguiente ;
-
-        cout << "ISBN     " << string(15, ' ') ;
-        cout << "Usuario  " << string(15, ' ') ;
-        cout << "Resultado" << string(15, ' ') ;
-        cout << endl ;
-        while(pdato != final){
-            cout << pdato->isbn << string(24-pdato->isbn.length(), ' ') ;  // espaceo ct
-            cout << pdato->user << string(24-pdato->user.length(), ' ') ;
-            cout << stockResult ;
-            cout << endl ;
-            pdato = pdato->siguiente ;
-        }
-        cout << pdato->isbn << string(24-pdato->isbn.length(), ' ') ;
-        cout << pdato->user << string(24-pdato->user.length(), ' ') ;
-        cout << stockResult ;
-        cout << endl ;
-
-    }
-    string inStock(int count){
-        // cada vez que se hace solicitud de libro debe entrar a resultado y revisar si en la lista hace match con isbn
-        /*int ejemplares = 0 ;
-        
-        pdato = final->siguiente ;
-        while(pdato != final){          // ESTE VIENE DE LA BD EN REALIDAD
-            pdato = pdato->siguiente ;
-            if(pdato->isbn == isbnQ){   // revisa el stock
-                ejemplares++ ;
-            }
-        }*/
-        // ***EDITAR: 0 CORRESPONDE AL NUMERO DE LIBROS DISPONIBLES QUE SE OBTINEE DE LA BD (.txt)
-        //int cantidad = count ;   
-        string r ;
-        if(count > 0)
-            r = "Asignado" ;
-        else
-            r = "No asignado" ;
-        return r ;
-    }
-
-} ;
 
 
 class FileReader {
@@ -472,13 +383,31 @@ public:
                     i++ ;
                 j++ ;
             }
-            if(content[i+1] == '\n')     
+            if(content[i+1] == '\n')
                 break ;                            
         }
         size_t pos = buf.find('\n') ;
         string r = buf.erase(0, pos+1) ;
         return r ;
     }
+	void fillVector(vector<Book> &newMyStorage, string buffer){
+		MStorage mStorage ;
+	    for(int i=0; buffer != ""; i++){
+	        buffer = mStorage.parser(buffer) ;
+	        if(buffer == "")
+	            break ;
+	        Book newBook(mStorage.getIsbn(), mStorage.getTitulo(), mStorage.getAutor(), mStorage.getYear(), mStorage.getCantidad()) ;
+	        newMyStorage.push_back(newBook) ;
+	    }
+	}
+
+	void getVector(vector<Book> &newMyStorage){
+		unsigned int size = newMyStorage.size() ;
+		for(unsigned int i=0; i<4; i++){
+			cout << "V ==> ISBN = [" << newMyStorage[i].getIsbn() << ", " << newMyStorage[i].getTitulo() << "]" << endl ;
+		}
+	}
+
     string getIsbn(){
         return isbn ;
     }
@@ -494,56 +423,130 @@ public:
     string getCantidad(){
         return cantidad ;
     }               
- 
+
     void setIsbn(string isbnM){isbn = isbnM ;}
     void setTitulo(string tituloM){titulo = tituloM ;}
     void setAutor(string autorM){autor = autorM ;}
     void setYear(string yearM){year = yearM ;}
     void setCantidad(string cantidadM){cantidad = cantidadM ;}
 
-
     ~MStorage(){}
 };
- 
-//------------------------------------------------------------------------------------------------------------------------
+
+
+class Queue:public MStorage{
+    Nodo *pdato ;
+    Nodo *frente ;
+    Nodo *final ;
+    string isbnQ, userQ ;
+public:
+    class Invalid{} ;
+
+    Queue():MStorage(){
+        pdato = NULL ;
+        frente = NULL ;
+        final = NULL ;
+    }
+    Queue(string isbnS, string userS):MStorage(){
+        pdato = NULL ;
+        frente = NULL ;
+        final = NULL ;
+
+        isbnQ = isbnS ;
+        userQ = userS ;
+
+        //stock() ;
+        insert(isbnQ, userQ) ; //isbnQ, userQ) ;
+        //inStock() ;
+        //mostrar() ;
+    }
+
+    void insert(string s1, string s2){
+        isbnQ = s1 ;
+        userQ = s2 ;
+
+        pdato = new Nodo(isbnQ, userQ, pdato) ;
+        pdato->isbn = isbnQ ; pdato->user = userQ ;
+        if(final == NULL){
+            final = pdato ;
+            pdato->siguiente = final ;
+        }
+        else{
+            pdato->siguiente = final->siguiente ;
+            final->siguiente = pdato ;
+            final = pdato ;
+        }
+        //inStock() ;
+    }
+    void mostrar(int stockCant){ // será el comando queue
+        if(final == NULL){
+            cout << "list is empty" << endl  ;
+            return ;
+        }
+        
+        string stockResult ;
+        if(stockCant>0)
+        	stockResult = "Asignado" ;
+        else
+        	stockResult = "No asignado" ;
+
+        pdato = final->siguiente ;
+
+        cout << "ISBN     " << string(15, ' ') ;
+        cout << "Usuario  " << string(15, ' ') ;
+        cout << "Resultado" << string(15, ' ') ;
+        cout << endl ;
+        while(pdato != final){
+            cout << pdato->isbn << string(24-pdato->isbn.length(), ' ') ;  // espaceo ct
+            cout << pdato->user << string(24-pdato->user.length(), ' ') ;
+            cout << stockResult ;
+            cout << endl ;
+            pdato = pdato->siguiente ;
+        }
+        cout << pdato->isbn << string(24-pdato->isbn.length(), ' ') ;
+        cout << pdato->user << string(24-pdato->user.length(), ' ') ;
+        cout << stockResult ;
+        cout << endl ;
+
+    }
+    int inStock(vector<Book> &newMyStorage){
+		int cant = 0 ;
+		unsigned int size = newMyStorage.size() ;
+		for(unsigned int i=0; i<size; i++){
+			if(newMyStorage[i].getIsbn() == isbnQ)  // revisa si el libro esta en existencias
+				cant += 1 ;
+		}
+		return cant ;
+    } 
+
+} ;
 
 
 
-int main()
-{
-    vector<Book> storage(100) ;
-    Book *pStorage = storage.data() ; int i=0 ;
+
+int main(){
+    vector<Book> myStorage ;
 
     FileReader fr = FileReader("text1.txt") ;
     Book book = Book() ;
-    MStorage mStorage = MStorage() ; 
+    MStorage mStorage = MStorage() ;
     Queue queue = Queue() ;
 
 /***************** Carga la BD ********************/
-    string buffer = fr.getBuffer() ;  
-    for(i=0; buffer != ""; i++){
-        buffer = mStorage.parser(buffer) ;  
-        if(buffer == "")
-            break ;      
-        book = Book(mStorage.getIsbn(), mStorage.getTitulo(), mStorage.getAutor(), mStorage.getYear(), mStorage.getCantidad()) ;    
-        pStorage[i] = book ;
-        //cout << "ISBN's = " << (storage.begin()+i)->getIsbn() << endl ;
-    }
- /*************************************************/  
+    string buffer = fr.getBuffer() ;
+    mStorage.fillVector(myStorage, buffer) ;
+    mStorage.getVector(myStorage) ;
+/**************************************************/  
 
-/*** Cola que maneja las solicitudes de libros ****/
-    int cant = 0 ;
+/*** Cola que maneja las solicitudes de libros ****/    
     string queue_isbn = "1-534-37397-9" ;
-    string queue_user = "javier" ;    
-    queue.insert(queue_isbn, queue_user) ;
-    for(int j=0; j<i ; j++){
-        //cout << "ISBN ::: " << (storage.begin()+j)->getIsbn() << endl ;
-        if((storage.begin()+j)->getIsbn() == queue_isbn){
-            cant += 1 ;//cout << "Success!" << endl ;
-        }
-    }    
-    queue.mostrar(cant) ;     
+    string queue_user = "Fallas" ;
+
+    queue.insert(queue_isbn, queue_user) ;   // solicitud de libro
+	int stock = queue.inStock(myStorage) ;
+    queue.mostrar(stock) ;
 /*************************************************/ 
 
-    return 0 ;
-}
+
+    return	0 ;
+}    
