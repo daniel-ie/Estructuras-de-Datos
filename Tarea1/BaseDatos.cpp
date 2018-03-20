@@ -15,184 +15,6 @@ using namespace std ;
 //using std::string ;
 
 
-class ISBN {
-private:
-    int pref, reg, edit, elem, verif ;
-    string ss ;
-     // estructura para los parámetros
-    struct ISBNparams{
-        string dato, datoAllStr ;
-        int datoInt, datoAllInt ;
-    } ;
-    // Arreglo para mantener los parametros disponibles
-    ISBNparams *id ;
-
-public:
-    /***** constructores *****/
-    int n=0;  // cantidad de parametros
-    int nn=0; // cantidad de numeros entre todos los parametros
-
-    ISBN(){
-        id = NULL ;
-    }
-
-    ISBN(string s){
-        id = NULL ;
-        ss = s ;
-        id = new ISBNparams[n] ;
-
-        loadParams() ;
-        printParams() ;
-
-        // Revisa cual tipo de isb ha ingresado el usuario
-        if(s.length() > 11){    // 13 digitos
-            int sumP = sumPares(id[0].datoAllStr) ;
-            int sumI = sumImpares(id[0].datoAllStr) ;
-            string verif13 = verificador13digitos(sumP, sumI) ;
-            insertVerificador(verif13) ;
-        }
-        else{                   // 10 digitos
-            string verif10 = verificador10digitos() ;
-            insertVerificador(verif10) ;
-        }
-        printParams() ;
-    }
-    // ISBN 13 digitos
-    ISBN(int p, int r, int e, int el){
-        id = NULL ;
-        pref = p ; reg = r ; edit = e ; elem = el ;
-
-        id = new ISBNparams[n] ;
-
-        string s ;
-        s = int2str(p) ;
-        s += int2str(r) ;
-        s += int2str(e) ;
-        s += int2str(el) ;
-        cout << "Parametros de isbn13 convertidos a un solo string = " << s << endl ;
-
-        ss = s ;
-        loadParams() ;
-        printParams() ;
-            int sumP = sumPares(id[0].datoAllStr) ;
-            int sumI = sumImpares(id[0].datoAllStr) ;
-            string verif13 = verificador13digitos(sumP, sumI) ;
-            insertVerificador(verif13) ;
-        printParams() ;
-    }
-    // ISBN 10 digitos
-    ISBN(int r, int e, int el){
-        id = NULL ;
-        reg = r ; edit = e ; elem = el ;
-
-        id = new ISBNparams[n] ;
-
-        string s ;
-        s += int2str(r) ;
-        s += int2str(e) ;
-        s += int2str(el) ;
-        cout << "Parametros de isbn10 convertidos a un solo string = " << s << endl ;
-
-        ss = s ;
-        loadParams() ;
-        printParams() ;
-            string verif10 = verificador10digitos() ;
-            insertVerificador(verif10) ;
-        printParams() ;
-    }
-
-    void loadParams(){
-        string temp, temp1 ;
-        int k=0 ;
-        for(int i=0, j=0; i<ss.length(); i++){
-            if(ss[i] == '-' || ss[i] == '\0'){
-                id[j].dato = temp ;             // load string version of params
-                id[j].datoInt = str2int(temp) ; // load int version of params
-                temp1 += temp ;                 // make a single string from params
-                temp = "" ;
-                j++ ;
-            }
-            else
-                temp += ss[i] ;
-
-            if(ss[i] != '-' || ss[i] == '\0'){
-                char c = ss[i] ;
-                id[k].datoAllInt = c - '0' ;    // load int by int
-                k++ ;
-            }
-            n = j ;
-            nn = k ;
-        }
-        id[0].datoAllStr = temp1 ;              // load all params in one string
-        //cout << "Todos los parametros en un string = " << temp1 << endl << endl ;
-    }
-    void printParams(){
-        cout << "Parametros concatenados en un solo string " << endl << "\t> " ;
-        cout << id[0].datoAllStr << endl ;
-    }
-    int sumPares(string str){
-        int sumP = 0 ;
-        for(int i=0; i<str.length(); i++){
-            if(i%2 == 0)
-                sumP += str[i] - '0';
-        }
-        return sumP ;
-    }
-    int sumImpares(string str){
-        int sumI = 0 ;
-        for(int i=0; i<str.length(); i++){
-            if(i%2 != 0)
-                sumI += str[i] - '0' ;
-        }
-        return sumI ;
-    }
-    string verificador10digitos(){
-        int temp=0 ; string s_temp ;
-        for(int i=0; i<nn-1; i++){
-            temp += id[i].datoAllInt*(i+1) ;  // escala digito por digito
-        }
-        temp %= 11 ;
-        temp = temp!=10 ? temp : 1 ; // CONSULTAR QUE PASA CON DIGITO = 10
-        verif = temp ;                        // actualiza la variable global verif
-        s_temp = int2str(temp) ;
-        cout << "Verificador de 10 digitos = " << s_temp << endl ;
-        return s_temp ;
-    }
-    string verificador13digitos(int pares, int impares){
-        int temp = 10 - (pares+impares*3)%10 ;
-        temp = temp!=10 ? temp : 1 ; // CONSULTAR QUE PASA CON DIGITO = 10
-        cout << "Verficador para tipo 13 digitos = " << temp << endl ;
-        verif = temp ;                        // actualiza la variable global verif
-        string verif13 = int2str(temp) ;
-        return verif13 ;
-    }
-    void insertVerificador(string s){
-        char c = s[0] ;
-        int x = str2int(s) ;
-        id[n].dato = s ;
-        id[n].datoInt = x ;
-        id[nn].datoAllInt = c - '0' ;
-        id[0].datoAllStr += s ;
-        n +=1 ;
-        //nn += 1 ;
-    }
-    int str2int(string s){
-        stringstream convert ;
-        int x ;
-        convert.str(s) ;
-        convert >> x ;
-        return x ;
-    }
-    string int2str(int x){
-        stringstream convert ;
-        string s ;
-        convert << x ;      // convierte entero a string
-        s = convert.str() ;
-        return s ;
-    }
-
-} ;
-
 
 class Nodo {
 public:
@@ -229,6 +51,7 @@ public:
     }
 
 } ;
+
 
 class Book {
     Nodo *pdato ;
@@ -523,6 +346,198 @@ public:
 
 
 
+class ISBN {
+private:    
+    int pref, reg, edit, elem, verif ;
+    string ss="", isbnInit, fullIsbn ;
+     // estructura para los parámetros
+    struct ISBNparams{
+        string dato, datoAllStr ;
+        int datoInt, datoAllInt ;
+    } ;
+    // Arreglo para mantener los parametros disponibles
+    ISBNparams *id ;
+
+public:
+    /***** constructores *****/
+    int n=5;  // cantidad de parametros
+    int nn; // cantidad de numeros entre todos los parametros
+
+    ISBN(){
+        id = NULL ;
+    }
+
+    ISBN(string s){
+        id = NULL ;
+        ss = s ; isbnInit = s ;
+        id = new ISBNparams[n] ;
+
+        loadParams() ;
+        //printParams() ;
+                
+        // Revisa cual tipo de isb ha ingresado el usuario 
+        if(s.length() > 11){    // 13 digitos
+            int sumP = sumPares(id[0].datoAllStr) ;
+            int sumI = sumImpares(id[0].datoAllStr) ;
+            string verif13 = verificador13digitos(sumP, sumI) ;
+			fullIsbn = getFullIsbn(verif13) ;
+            //insertVerificador(verif13) ;
+        }
+        else{                   // 10 digitos
+            string verif10 = verificador10digitos() ;
+            fullIsbn = getFullIsbn(verif10) ;
+            //insertVerificador(verif10) ;
+        }            
+        //printParams() ;        
+    }
+    // ISBN 13 digitos
+    ISBN(int p, int r, int e, int el){
+        id = NULL ;
+        pref = p ; reg = r ; edit = e ; elem = el ;
+
+        id = new ISBNparams[n] ;
+
+        string s ; 
+        s = int2str(p) ;
+        s += int2str(r) ;
+        s += int2str(e) ;
+        s += int2str(el) ;
+        cout << "Parametros de isbn13 convertidos a un solo string = " << s << endl ;
+
+        ss = s ; isbnInit = s ;
+        loadParams() ;
+        //printParams() ;        
+        int sumP = sumPares(id[0].datoAllStr) ;
+        int sumI = sumImpares(id[0].datoAllStr) ;
+        string verif13 = verificador13digitos(sumP, sumI) ;
+        fullIsbn = getFullIsbn(verif13) ;
+            //insertVerificador(verif13) ;
+        	//printParams() ;            
+    }
+    // ISBN 10 digitos
+    ISBN(int r, int e, int el){
+        id = NULL ;
+        reg = r ; edit = e ; elem = el ;
+
+        id = new ISBNparams[n] ;
+
+        string s ;
+        s += int2str(r) ;
+        s += int2str(e) ;
+        s += int2str(el) ;
+        cout << "Parametros de isbn10 convertidos a un solo string = " << s << endl ;
+
+        ss = s ; isbnInit = s ;
+        loadParams() ;
+        //printParams() ;        
+        string verif10 = verificador10digitos() ;
+        fullIsbn = getFullIsbn(verif10) ;
+        //insertVerificador(verif10) ;
+        //printParams() ;            
+    }
+    string wholeIsbn(){
+    	return fullIsbn ;
+    }
+    string getFullIsbn(string verif){
+    	string full ;
+    	full = isbnInit ;
+    	full += "-" ;
+    	full += verif ;
+		return full ;    	
+    }
+    void loadParams(){
+        string temp, temp1 ;
+        int k=0 ;
+        for(int i=0, j=0; i<=ss.length(); i++){
+            if(ss[i] == '-' || ss[i] == '\0'){                
+                id[j].dato = temp ;             // load string version of params
+                id[j].datoInt = str2int(temp) ; // load int version of params
+                temp1 += temp ;                 // make a single string from params
+                temp = "" ;
+                j++ ;
+            }
+            else
+                temp += ss[i] ;                         
+            
+            if(ss[i] != '-' || ss[i] == '\0'){
+                char c = ss[i] ;
+                id[k].datoAllInt = c - '0' ;    // load int by int                
+                k++ ;
+            }
+            n = j ;
+            nn = k ;
+        }
+        id[0].datoAllStr = temp1 ;              // load all params in one string
+        //cout << "Todos los parametros en un string = " << temp1 << endl << endl ;
+    }
+    void printParams(){
+        cout << "Parametros concatenados en un solo string " << endl << "\t> " ;
+        cout << id[0].datoAllStr << endl ;
+    }
+    int sumPares(string str){
+        int sumP = 0 ;
+        for(int i=0; i<str.length(); i++){
+            if(i%2 == 0)
+                sumP += str[i] - '0';
+        }
+        return sumP ;
+    }
+    int sumImpares(string str){
+        int sumI = 0 ;
+        for(int i=0; i<str.length(); i++){
+            if(i%2 != 0)
+                sumI += str[i] - '0' ;
+        }
+        return sumI ;
+    }
+    string verificador10digitos(){
+        int temp=0 ; string s_temp ;
+        for(int i=0; i<nn-1; i++){            
+            temp += id[i].datoAllInt*(i+1) ;  // escala digito por digito
+        }        
+        temp %= 11 ;
+        temp = temp!=10 ? temp : 1 ; // CONSULTAR QUE PASA CON DIGITO = 10
+        verif = temp ;                        // actualiza la variable global verif
+        s_temp = int2str(temp) ;
+        cout << "Verificador de 10 digitos = " << s_temp << endl ;
+        return s_temp ;
+    }    
+    string verificador13digitos(int pares, int impares){
+        int temp = 10 - (pares+impares*3)%10 ;
+        temp = temp!=10 ? temp : 1 ; // CONSULTAR QUE PASA CON DIGITO = 10
+        cout << "Verficador para tipo 13 digitos = " << temp << endl ;
+        verif = temp ;                        // actualiza la variable global verif
+        string verif13 = int2str(temp) ;
+        return verif13 ;
+    }
+    void insertVerificador(string s){
+        char c = s[0] ;
+        int x = str2int(s) ;
+        id[n].dato = s ;
+        id[n].datoInt = x ;
+        id[nn].datoAllInt = c - '0' ;
+        id[0].datoAllStr += s ;
+        n +=1 ;
+        //nn += 1 ;
+    }
+    int str2int(string s){
+        stringstream convert ;
+        int x ;
+        convert.str(s) ;
+        convert >> x ;
+        return x ;
+    }
+    string int2str(int x){                
+        stringstream convert ;
+        string s ;
+        convert << x ;      // convierte entero a string
+        s = convert.str() ;
+        return s ;
+    }
+
+} ; 
+
+
 
 int main(){
     vector<Book> myStorage ;
@@ -531,21 +546,28 @@ int main(){
     Book book = Book() ;
     MStorage mStorage = MStorage() ;
     Queue queue = Queue() ;
-
+    ISBN isbn = ISBN() ;
+ 	
 /***************** Carga la BD ********************/
     string buffer = fr.getBuffer() ;
     mStorage.fillVector(myStorage, buffer) ;
     mStorage.getVector(myStorage) ;
-/**************************************************/  
+/**************************************************/
 
-/*** Cola que maneja las solicitudes de libros ****/    
+/************** Calculo del ISBN ******************/    
+	book = Book("0-534-37397-9", "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;    
+	isbn = ISBN("0-534-37397") ;
+	cout << "whole isbn = " << isbn.wholeIsbn() << endl ;
+/**************************************************/
+	
+/*** Cola que maneja las solicitudes de libros ****/
     string queue_isbn = "1-534-37397-9" ;
     string queue_user = "Fallas" ;
 
     queue.insert(queue_isbn, queue_user) ;   // solicitud de libro
 	int stock = queue.inStock(myStorage) ;
     queue.mostrar(stock) ;
-/*************************************************/ 
+/*************************************************/
 
 
     return	0 ;
