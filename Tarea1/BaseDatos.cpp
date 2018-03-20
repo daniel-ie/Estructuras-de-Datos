@@ -542,31 +542,30 @@ public:
 int main(){
     vector<Book> myStorage ;
 
-    FileReader fr = FileReader("text1.txt") ;
+    FileReader fr = FileReader("text1.txt") ;			// ~~ load(archivo.txt)
     Book book = Book() ;
     MStorage mStorage = MStorage() ;
     Queue queue = Queue() ;
     ISBN isbn = ISBN() ;
  	
-/***************** Carga la BD ********************/
+/***************** Carga la BD ********************/	// ~~ save() && save(archivo.txt)
     string buffer = fr.getBuffer() ;
     mStorage.fillVector(myStorage, buffer) ;
     mStorage.getVector(myStorage) ;
 /**************************************************/
 
-/************** Calculo del ISBN ******************/    
-	book = Book("0-534-37397-9", "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;    
+/************ Creando objeto libro ****************/    // ~~ insert()
 	isbn = ISBN("0-534-37397") ;
-	cout << "whole isbn = " << isbn.wholeIsbn() << endl ;
+	book = Book(isbn.wholeIsbn(), "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;    
 /**************************************************/
-	
-/*** Cola que maneja las solicitudes de libros ****/
+
+/*** Cola que maneja las solicitudes de libros ****/	// ~~ get(isbn, usuario) && back(isbn)
     string queue_isbn = "1-534-37397-9" ;
     string queue_user = "Fallas" ;
 
-    queue.insert(queue_isbn, queue_user) ;   // solicitud de libro
+    queue.insert(queue_isbn, queue_user) ; //solicitud
 	int stock = queue.inStock(myStorage) ;
-    queue.mostrar(stock) ;
+    queue.mostrar(stock) ;								// ~~ pqueue()
 /*************************************************/
 
 
