@@ -6,59 +6,57 @@
 #include <stdlib.h>
 #include <vector>
 
-
 #include "bd.h"
 
 
-
-///////////////////// Nodo //////////////////////////
-    //Nodo *siguiente ;
+////////////////////////////////////////////////////
+///             Clase Nodo
+////////////////////////////////////////////////////
 /*--------------------------- Sobrecarga para  Clase Queue ----------------------------------------------*/
-Nodo::Nodo(string isbnS, string userS){
-    isbn = isbnS ; user = userS ;
+Nodo::Nodo(string isbn, string user){
+    this->isbn = isbn ; this->user = user ;
     siguiente = NULL ;
 }
-Nodo::Nodo(string isbnS, string userS, Nodo *p){
-    isbn = isbnS ; user = userS ;
+Nodo::Nodo(string isbn, string user, Nodo *p){
+    this->isbn = isbn ; this->user = user ;
     siguiente = p ;
 }
-//Nodo::Nodo *frente ;
-//Nodo::Nodo *final ;
 /*---------------------------- Sobrecarga para  Clase Book ----------------------------------------------*/
-Nodo::Nodo(string isbnS, string tituloS, string autorS, string yearS, string cantidadS){
-    isbn = isbnS ;
-    titulo = tituloS ;
-    autor = autorS ;
-    year = yearS ;
-    cantidad = cantidadS ;
+Nodo::Nodo(string isbn, string titulo, string autor, string year, string cantidad){
+    this->isbn = isbn ;
+    this->titulo = titulo ;
+    this->autor = autor ;
+    this->year = year ;
+    this->cantidad = cantidad ;
     siguiente = NULL ;
 }
-Nodo::Nodo(string isbnS, string tituloS, string autorS, string yearS, string cantidadS, Nodo *p){
-    isbn = isbnS ;
-    titulo = tituloS ;
-    autor = autorS ;
-    year = yearS ;
-    cantidad = cantidadS ;
+Nodo::Nodo(string isbn, string titulo, string autor, string year, string cantidad, Nodo *p){
+    this->isbn = isbn ;
+    this->titulo = titulo ;
+    this->autor = autor ;
+    this->year = year ;
+    this->cantidad = cantidad ;
     siguiente = p ;
 }
 
-///////////////////// Book //////////////////////////
-
+////////////////////////////////////////////////////
+///             Clase Book
+////////////////////////////////////////////////////
 Book::Book(){
     pdato = NULL ;
 }
-Book::Book(string isbnS, string tituloS, string autorS, string yearS, string cantidadS){
+Book::Book(string isbnB, string tituloB, string autorB, string yearB, string cantidadB){
     pdato = NULL ;
-    isbnB       = isbnS ;
-    tituloB     = tituloS ;
-    autorB      = autorS ;
-    yearB       = yearS ;
-    cantidadB   = cantidadS ;
-    insertar(isbnS, tituloS, autorS, yearS, cantidadS) ;
+    this->isbnB       = isbnB ;
+    this->tituloB     = tituloB ;
+    this->autorB      = autorB ;
+    this->yearB       = yearB ;
+    this->cantidadB   = cantidadB ;
+    insertar(isbnB, tituloB, autorB, yearB, cantidadB) ;
     mostrar() ;
 }
-void Book::insertar(string s1, string s2, string s3, string s4, string s5){
-    pdato = new Nodo(s1, s2, s3, s4, s5, pdato) ;
+void Book::insertar(string isbnB, string tituloB, string autorB, string yearB, string cantidadB){
+    pdato = new Nodo(isbnB, tituloB, autorB, yearB, cantidadB, pdato) ;
 }
 void Book::mostrar(){
     cout << "Book = [" ;
@@ -110,11 +108,11 @@ string Book::getRegion(){
 }
 
 
-/////////////////// MStorage ////////////////////////
 
+////////////////////////////////////////////////////
+///             Clase MStorage
+////////////////////////////////////////////////////
 //MStorage::MStorage():Book(){}
-
-
 string MStorage::parser(string buf){
     content = buf ;
     isbn = "" ; titulo = "" ; autor = "" ; year = "" ; cantidad = "" ;
@@ -155,14 +153,12 @@ void MStorage::fillVector(vector<Book> &newMyStorage, string buffer){
         newMyStorage.push_back(newBook) ;
     }
 }
-
 void MStorage::getVector(vector<Book> &newMyStorage){
     unsigned int size = newMyStorage.size() ;
     for(unsigned int i=0; i<4; i++){
         cout << "V ==> ISBN = [" << newMyStorage[i].getIsbn() << ", " << newMyStorage[i].getTitulo() << "]" << endl ;
     }
 }
-
 string MStorage::getIsbn(){
     return isbn ;
 }
@@ -187,7 +183,9 @@ void MStorage::setCantidad(string cantidadM){cantidad = cantidadM ;}
 MStorage::~MStorage(){}
 
 
-////////////////// File Reader //////////////////////
+////////////////////////////////////////////////////
+///             Clase FileReader
+////////////////////////////////////////////////////
 FileReader::FileReader(const char *file){
     BD_file = file ;
 }
@@ -229,22 +227,21 @@ string FileReader::getBuffer(){
 }
 
 
-///////////////// Pqueue ///////////////////////
-
+////////////////////////////////////////////////////
+///             Clase Queue
+////////////////////////////////////////////////////
 //Queue::Invalid{} ;
-
 Queue::Queue():MStorage(){
     pdato = NULL ;
     frente = NULL ;
     final = NULL ;
 }
-Queue::Queue(string isbnS, string userS):MStorage(){
+Queue::Queue(string isbnQ, string userQ):MStorage(){
     pdato = NULL ;
     frente = NULL ;
     final = NULL ;
-
-    isbnQ = isbnS ;
-    userQ = userS ;
+    this->isbnQ = isbnQ ;
+    this->userQ = userQ ;
 
     //stock() ;
     insert(isbnQ, userQ) ; //isbnQ, userQ) ;
@@ -252,9 +249,9 @@ Queue::Queue(string isbnS, string userS):MStorage(){
     //mostrar() ;
 }
 
-void Queue::insert(string s1, string s2){
-    isbnQ = s1 ;
-    userQ = s2 ;
+void Queue::insert(string isbnQ, string userQ){
+    this->isbnQ = isbnQ ;
+    this->userQ = userQ ;
 
     pdato = new Nodo(isbnQ, userQ, pdato) ;
     pdato->isbn = isbnQ ; pdato->user = userQ ;
@@ -310,21 +307,19 @@ int Queue::inStock(vector<Book> &newMyStorage){
     return cant ;
 }
 
-
-////////////////// ISBN ////////////////////////
+////////////////////////////////////////////////////
+///             Clase ISBN
+////////////////////////////////////////////////////
 ISBN::ISBN(){
         id = NULL ;
 }
-
 ISBN::ISBN(string s){
         id = NULL ;
         ss = s ; isbnInit = s ;
         id = new ISBNparams[n] ;
 
-        loadParams() ;
-        //printParams() ;
-
-        // Revisa cual tipo de isb ha ingresado el usuario
+        loadParams() ; //printParams() ;
+        // Revisa cual tipo de isbn ha ingresado el usuario
         if(s.length() > 11){    // 13 digitos
             int sumP = sumPares(id[0].datoAllStr) ;
             int sumI = sumImpares(id[0].datoAllStr) ;
@@ -340,17 +335,20 @@ ISBN::ISBN(string s){
         printParams() ;
 }
     // ISBN 13 digitos
-ISBN::ISBN(int p, int r, int e, int el){
-        id = NULL ;
-        pref = p ; reg = r ; edit = e ; elem = el ;
-
+ISBN::ISBN(int pr, int pa, int ed, int sec, int dv){
         id = new ISBNparams[n] ;
-
+        this->pr    = pr ;
+        this->pa    = pa ;
+        this->ed    = ed ;
+        this->sec   = sec ;
+        this->dv    = dv ;
         string s ;
-        s = int2str(p) ;
-        s += int2str(r) ;
-        s += int2str(e) ;
-        s += int2str(el) ;
+
+        s = int2str(pr) ;
+        s += int2str(pa) ;
+        s += int2str(ed) ;
+        s += int2str(sec) ;
+        //s += int2str(dv) ;
         cout << "Parametros de isbn13 convertidos a un solo string = " << s << endl ;
 
         ss = s ; isbnInit = s ;
@@ -364,16 +362,19 @@ ISBN::ISBN(int p, int r, int e, int el){
             //printParams() ;
 }
     // ISBN 10 digitos
-ISBN::ISBN(int r, int e, int el){
+ISBN::ISBN(int pa, int ed, int sec, int dv){
         id = NULL ;
-        reg = r ; edit = e ; elem = el ;
-
+        this->pa = pa ;
+        this->ed = ed ;
+        this->sec = sec ;
+        this->dv = dv ;
         id = new ISBNparams[n] ;
 
         string s ;
-        s += int2str(r) ;
-        s += int2str(e) ;
-        s += int2str(el) ;
+        s = int2str(pa) ;
+        s += int2str(ed) ;
+        s += int2str(sec) ;
+        //s += int2str(dv) ;
         cout << "Parametros de isbn10 convertidos a un solo string = " << s << endl ;
 
         ss = s ; isbnInit = s ;
@@ -383,17 +384,6 @@ ISBN::ISBN(int r, int e, int el){
         fullIsbn = getFullIsbn(verif10) ;
         //insertVerificador(verif10) ;
         //printParams() ;
-}
-
-string ISBN::wholeIsbn(){
-    return fullIsbn ;
-}
-string ISBN::getFullIsbn(string verif){
-    string full ;
-    full = isbnInit ;
-    full += "-" ;
-    full += verif ;
-    return full ;
 }
 void ISBN::loadParams(){
     string temp, temp1 ;
@@ -447,7 +437,7 @@ string ISBN::verificador10digitos(){
     }
     temp %= 11 ;
     temp = temp!=10 ? temp : 1 ; // CONSULTAR QUE PASA CON DIGITO = 10
-    verif = temp ;                        // actualiza la variable global verif
+    dv = temp ;                        // actualiza la variable global verif
     s_temp = int2str(temp) ;
     cout << "Verificador de 10 digitos = " << s_temp << endl ;
     return s_temp ;
@@ -456,7 +446,7 @@ string ISBN::verificador13digitos(int pares, int impares){
     int temp = 10 - (pares+impares*3)%10 ;
     temp = temp!=10 ? temp : 1 ; // CONSULTAR QUE PASA CON DIGITO = 10
     cout << "Verficador para tipo 13 digitos = " << temp << endl ;
-    verif = temp ;                        // actualiza la variable global verif
+    dv = temp ;                        // actualiza la variable global verif
     string verif13 = int2str(temp) ;
     return verif13 ;
 }
@@ -469,6 +459,16 @@ void ISBN::insertVerificador(string s){
     id[0].datoAllStr += s ;
     n +=1 ;
     //nn += 1 ;
+}
+string ISBN::wholeIsbn(){
+    return fullIsbn ;
+}
+string ISBN::getFullIsbn(string verif){
+    string full ;
+    full = isbnInit ;
+    full += "-" ;
+    full += verif ;
+    return full ;
 }
 int ISBN::str2int(string s){
     stringstream convert ;
@@ -484,10 +484,3 @@ string ISBN::int2str(int x){
     s = convert.str() ;
     return s ;
 }
-
-
-/*#include "ISBNRef.h"
-#include "Nodo1.h"
-#include "Index.h"
-#include "IndexVal.h"*/
-
