@@ -17,9 +17,7 @@ using namespace std ;
 
 
 int main(){
-
     vector<Book> myStorage ;
-
     FileReader fr = FileReader("/home/edgar_ie/Documents/text1.txt") ;			// ~~ load(archivo.txt)
     Book book = Book() ;
     MStorage mStorage = MStorage() ;
@@ -33,7 +31,7 @@ int main(){
 /**************************************************/
 
 /************ Creando objeto libro ****************/    // ~~ insert()
-    isbn = ISBN("0-534-37397") ;
+    isbn = ISBN("0-534-37397-6") ;
     book = Book(isbn.wholeIsbn(), "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;
 /**************************************************/
 
