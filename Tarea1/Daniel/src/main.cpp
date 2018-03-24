@@ -31,8 +31,9 @@ int main(){
 /**************************************************/
 
 /************ Creando objeto libro ****************/    // ~~ insert()
-    isbn = ISBN("0-534-37397-6") ;
-    book = Book(isbn.wholeIsbn(), "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;
+    isbn = ISBN("0-19-852663-6") ;
+    book = Book(isbn.getIsbn(), "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;
+    book = Book(isbn.getIsbn(), "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;
 /**************************************************/
 
 /*** Cola que maneja las solicitudes de libros ****/	// ~~ get(isbn, usuario) && back(isbn)
@@ -48,3 +49,5 @@ int main(){
     return	0 ;
 }
 
+// Algunos isbn's : "978-84-481-5645-7", "0-19-852663-6", "978-84-481-5645-7"
+// hay un bug para isbn=0-545-01022-5
