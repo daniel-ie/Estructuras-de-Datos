@@ -165,17 +165,17 @@ public:
     void fillVector(vector<Book> &, string) ;
     void getVector(vector<Book> &) ;
 
-    string getIsbn() ;
-    string getTitulo() ;
-    string getAutor() ;
-    string getYear() ;
-    string getCantidad() ;
+    string getIsbnMS() ;
+    string getTituloMS() ;
+    string getAutorMS() ;
+    string getYearMS() ;
+    string getCantidadMS() ;
 
-    void setIsbn(string) ;
+    /*void setIsbn(string) ;
     void setTitulo(string) ;
     void setAutor(string) ;
     void setYear(string) ;
-    void setCantidad(string) ;
+    void setCantidad(string) ;*/
 
     ~MStorage() ;
 
@@ -188,12 +188,14 @@ class FileReader {
 private:
     const char *BD_file ;
     string isbn, titulo, autor, year, cantidad, content ;
-    string buffer ;
+    string buffer, nextBookBuf ;
 public:
     FileReader(const char *) ;
     void writer(string) ;
     void reader() ;
     string getBuffer() ;
+    string next() ;
+    string untilTokenFR(string &) ;
 
 } ;
 
