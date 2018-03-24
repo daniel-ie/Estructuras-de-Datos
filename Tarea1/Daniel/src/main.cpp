@@ -36,6 +36,11 @@ int main(){
     book = Book(isbn.getIsbn(), "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;
 /**************************************************/
 
+    fr.getBuffer() ;
+    string book1 = fr.next() ;
+    cout << "LIBRO : " << book1 << endl ;
+    string book2 = fr.next() ;
+    cout << "LIBRO : " << book2 << endl ;
 /*** Cola que maneja las solicitudes de libros ****/	// ~~ get(isbn, usuario) && back(isbn)
     string queue_isbn = "1-534-37397-9" ;
     string queue_user = "Fallas" ;
