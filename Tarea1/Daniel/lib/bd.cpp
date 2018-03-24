@@ -149,37 +149,44 @@ void MStorage::fillVector(vector<Book> &newMyStorage, string buffer){
         buffer = mStorage.parser(buffer) ;
         if(buffer == "")
             break ;
-        Book newBook(mStorage.getIsbn(), mStorage.getTitulo(), mStorage.getAutor(), mStorage.getYear(), mStorage.getCantidad()) ;
+        Book newBook(mStorage.getIsbnMS(), mStorage.getTituloMS(), mStorage.getAutorMS(), mStorage.getYearMS(), mStorage.getCantidadMS()) ;
         newMyStorage.push_back(newBook) ;
     }
 }
 void MStorage::getVector(vector<Book> &newMyStorage){
-    unsigned int size = newMyStorage.size() ;
-    for(unsigned int i=0; i<4; i++){
-        cout << "V ==> ISBN = [" << newMyStorage[i].getIsbn() << ", " << newMyStorage[i].getTitulo() << "]" << endl ;
+    size_t size = newMyStorage.size() ;
+    for(int i=0; i<size; i++){
+        cout << "Vector ==> [" ;
+        cout << (newMyStorage.begin()+i)->Book::getIsbn()       << ", " ;
+        cout << (newMyStorage.begin()+i)->Book::getTitulo()     << ", " ;
+        cout << (newMyStorage.begin()+i)->Book::getAutor()      << ", " ;
+        cout << (newMyStorage.begin()+i)->Book::getYear()       << ", " ;
+        cout << (newMyStorage.begin()+i)->Book::getCantidad()   ;
+        cout <<  "]" << endl ;
     }
+
 }
-string MStorage::getIsbn(){
+string MStorage::getIsbnMS(){
     return isbn ;
 }
-string MStorage::getTitulo(){
+string MStorage::getTituloMS(){
     return titulo ;
 }
-string MStorage::getAutor(){
+string MStorage::getAutorMS(){
     return autor ;
 }
-string MStorage::getYear(){
+string MStorage::getYearMS(){
     return year ;
 }
-string MStorage::getCantidad(){
+string MStorage::getCantidadMS(){
     return cantidad ;
 }
 
-void MStorage::setIsbn(string isbnM){isbn = isbnM ;}
+/*void MStorage::setIsbn(string isbnM){isbn = isbnM ;}
 void MStorage::setTitulo(string tituloM){titulo = tituloM ;}
 void MStorage::setAutor(string autorM){autor = autorM ;}
 void MStorage::setYear(string yearM){year = yearM ;}
-void MStorage::setCantidad(string cantidadM){cantidad = cantidadM ;}
+void MStorage::setCantidad(string cantidadM){cantidad = cantidadM ;}*/
 MStorage::~MStorage(){}
 
 
@@ -199,7 +206,24 @@ void FileReader::writer(string s){
     else
         cout << "Can't open file" << endl;
 }
-
+string FileReader::next(){
+    string buf = nextBookBuf ; //FileReader::getBuffer() ;
+    string oneBook = untilTokenFR(buf) ;
+    return oneBook ;
+}
+string FileReader::untilTokenFR(string &tira){
+    string tilT = "", temp ;
+    int i ;
+    for(i=0; i<tira.length() && tira[i]!=';'; i++){ // get first token
+        tilT += tira[i] ;
+    }
+    for(; i<tira.length(); i++){ // Clean tira from first token
+        temp += tira [i+2] ;
+    }
+    tira = temp ;
+    nextBookBuf = temp ;
+    return tilT ;
+}
 void FileReader::reader(){
         ifstream BD(BD_file) ;
         string line ;
@@ -223,6 +247,7 @@ string FileReader::getBuffer(){
         }
         else
             cout << "Can't open file" << endl ;
+        nextBookBuf = buffer ;
     return buffer ;
 }
 
