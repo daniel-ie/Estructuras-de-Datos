@@ -36,11 +36,22 @@ int main(){
     book = Book(isbn.getIsbn(), "Nombre del viento", "Patrick Rothfuss", "2007", "3") ;
 /**************************************************/
 
+/********* Retornar el siguiente libro ************/    // ~~
     fr.getBuffer() ;
+
     string book1 = fr.next() ;
-    cout << "LIBRO : " << book1 << endl ;
-    string book2 = fr.next() ;
-    cout << "LIBRO : " << book2 << endl ;
+    mStorage.parser(book1)   ;
+    book = Book(mStorage.getIsbnMS(), mStorage.getTituloMS(), mStorage.getAutorMS(), mStorage.getYearMS(), mStorage.getCantidadMS()) ;
+
+    book1 = fr.next() ;
+    mStorage.parser(book1) ;
+    book = Book(mStorage.getIsbnMS(), mStorage.getTituloMS(), mStorage.getAutorMS(), mStorage.getYearMS(), mStorage.getCantidadMS()) ;
+
+    //cout << "LIBRO : " << book. << endl ;
+    //string book2 = fr.next() ;
+    //cout << "LIBRO : " << book2 << endl ;
+/**************************************************/
+
 /*** Cola que maneja las solicitudes de libros ****/	// ~~ get(isbn, usuario) && back(isbn)
     string queue_isbn = "1-534-37397-9" ;
     string queue_user = "Fallas" ;
