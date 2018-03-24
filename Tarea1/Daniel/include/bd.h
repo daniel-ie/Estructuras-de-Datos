@@ -225,7 +225,7 @@ class ISBN {
 private:
     //int pref, reg, edit, elem, verif ;
     int pr, pa, ed, sec, dv ;
-    string ss="", isbnInit, fullIsbn ;
+    string isbnNoTolkens, isbnWithTolken ;
     // estructura para los parámetros
     struct ISBNparams{
         string dato, datoAllStr ;
@@ -244,16 +244,20 @@ public:
     ISBN(int, int, int, int, int) ; // ISBN 13 digitos
     ISBN(int, int, int, int) ;      // ISBN 10 digitos
 
-    string wholeIsbn() ;
-    string getFullIsbn(string) ;
+    string getIsbn() ;
     void loadParams() ;
+    string untilToken(string &) ;
     void printParams() ;
     int sumPares(string) ;
     int sumImpares(string) ;
-    string verificador10digitos() ;
-    string verificador13digitos(int, int) ;
-    void insertVerificador(string) ;
+    string verif10digitos() ;
+    string verif13digitos(int, int) ;
+    string concatParams2str(int, int, int, int, int) ;
+    string concatParams2str(int, int, int, int) ;
+    string isbn2str(int, int, int, int, int) ;
+    string isbn2str(int, int, int, int) ;
     int str2int(string) ;
+    int str2int(char) ;
     string int2str(int) ;
 
 } ;
