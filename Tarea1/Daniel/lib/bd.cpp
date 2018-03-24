@@ -314,105 +314,127 @@ ISBN::ISBN(){
         id = NULL ;
 }
 ISBN::ISBN(string s){
-        id = NULL ;
-        ss = s ; isbnInit = s ;
         id = new ISBNparams[n] ;
+        ss = s ;
+        string tira = ss ;
 
-        loadParams() ; //printParams() ;
         // Revisa cual tipo de isbn ha ingresado el usuario
-        if(s.length() > 11){    // 13 digitos
-            int sumP = sumPares(id[0].datoAllStr) ;
-            int sumI = sumImpares(id[0].datoAllStr) ;
-            string verif13 = verificador13digitos(sumP, sumI) ;
-            fullIsbn = getFullIsbn(verif13) ;
-            //insertVerificador(verif13) ;
+        if(s.length() > 13){                               // 13 digitos
+            // Setear los parametros en enteros  //loadParams() ;
+            pr    = str2int(untilToken(tira)) ;
+            pa    = str2int(untilToken(tira)) ;
+            ed    = str2int(untilToken(tira)) ;
+            sec   = str2int(untilToken(tira)) ;
+            dv    = str2int(untilToken(tira)) ;
+            // Genera un isbn sin tokens para operarlo
+            isbnNoTolkens = concatParams2str(pr, pa, ed, sec, dv) ;
+            int sumP = sumPares(isbnNoTolkens) ;
+            int sumI = sumImpares(isbnNoTolkens) ;
+            string verif13 = verif13digitos(sumP, sumI) ;
+            if(str2int(verif13) != dv)
+                cout << "Enviar error de digito verificador" << endl ;
         }
-        else{                   // 10 digitos
-            string verif10 = verificador10digitos() ;
-            fullIsbn = getFullIsbn(verif10) ;
-            //insertVerificador(verif10) ;
+        else{                                             // 10 digitos
+            // Setear los parametros en enteros  //loadParams() ;
+            pa    = str2int(untilToken(tira)) ;
+            ed    = str2int(untilToken(tira)) ;
+            sec   = str2int(untilToken(tira)) ;
+            dv    = str2int(untilToken(tira)) ;
+            // Genera un isbn sin tokens para operarlo
+            isbnNoTolkens = concatParams2str(pa, ed, sec, dv) ;
+            string verif10 = verif10digitos() ;
+            if(str2int(verif10) != dv)
+                cout << "Enviar error de digito verificador" << endl ;
         }
         printParams() ;
 }
     // ISBN 13 digitos
 ISBN::ISBN(int pr, int pa, int ed, int sec, int dv){
         id = new ISBNparams[n] ;
+        string isbnNoTolkens ;
+
         this->pr    = pr ;
         this->pa    = pa ;
         this->ed    = ed ;
         this->sec   = sec ;
         this->dv    = dv ;
-        string s ;
 
-        s = int2str(pr) ;
-        s += int2str(pa) ;
-        s += int2str(ed) ;
-        s += int2str(sec) ;
-        //s += int2str(dv) ;
-        cout << "Parametros de isbn13 convertidos a un solo string = " << s << endl ;
-
-        ss = s ; isbnInit = s ;
-        loadParams() ;
-        //printParams() ;
-        int sumP = sumPares(id[0].datoAllStr) ;
-        int sumI = sumImpares(id[0].datoAllStr) ;
-        string verif13 = verificador13digitos(sumP, sumI) ;
-        fullIsbn = getFullIsbn(verif13) ;
-            //insertVerificador(verif13) ;
-            //printParams() ;
+        isbnNoTolkens = concatParams2str(pr, pa, ed, sec, dv) ;
+        int sumP = sumPares(isbnNoTolkens) ;
+        int sumI = sumImpares(isbnNoTolkens) ;
+        string verif13 = verif13digitos(sumP, sumI) ;
+        if(str2int(verif13) != dv)
+            cout << "Enviar error de digito verificador" << endl ;
 }
     // ISBN 10 digitos
 ISBN::ISBN(int pa, int ed, int sec, int dv){
-        id = NULL ;
+        id = new ISBNparams[n] ;
         this->pa = pa ;
         this->ed = ed ;
         this->sec = sec ;
         this->dv = dv ;
-        id = new ISBNparams[n] ;
 
         string s ;
-        s = int2str(pa) ;
-        s += int2str(ed) ;
-        s += int2str(sec) ;
-        //s += int2str(dv) ;
-        cout << "Parametros de isbn10 convertidos a un solo string = " << s << endl ;
-
-        ss = s ; isbnInit = s ;
+        s  = int2str(pa)  ;
+        s += int2str(ed)  ;
+        s += int2str(sec) ; // Se concatenan todos los parametros en un string
+        ss = s ;// isbnInit = s ;
         loadParams() ;
-        //printParams() ;
-        string verif10 = verificador10digitos() ;
-        fullIsbn = getFullIsbn(verif10) ;
-        //insertVerificador(verif10) ;
+        string verif10 = verif10digitos() ;
+        if(str2int(verif10) != dv)
+            cout << "Enviar error de digito verificador" << endl ;
         //printParams() ;
 }
 void ISBN::loadParams(){
-    string temp, temp1 ;
-    int k=0 ;
-    for(int i=0, j=0; i<=ss.length(); i++){
-        if(ss[i] == '-' || ss[i] == '\0'){
-            id[j].dato = temp ;             // load string version of params
-            id[j].datoInt = str2int(temp) ; // load int version of params
-            temp1 += temp ;                 // make a single string from params
-            temp = "" ;
-            j++ ;
-        }
-        else
-            temp += ss[i] ;
-
-        if(ss[i] != '-' || ss[i] == '\0'){
-            char c = ss[i] ;
-            id[k].datoAllInt = c - '0' ;    // load int by int
-            k++ ;
-        }
-        n = j ;
-        nn = k ;
-    }
-    id[0].datoAllStr = temp1 ;              // load all params in one string
-    //cout << "Todos los parametros en un string = " << temp1 << endl << endl ;
+    string tira = ss ;
+    // Pasa a entero los valores de los parametros del isbn
+    pr    = str2int(untilToken(tira)) ;
+    pa    = str2int(untilToken(tira)) ;
+    ed    = str2int(untilToken(tira)) ;
+    sec   = str2int(untilToken(tira)) ;
+    dv    = str2int(untilToken(tira)) ;
+    /*cout << "pr  = " << pr << endl ;
+    cout << "pa  = " << pa << endl ;
+    cout << "ed  = " << ed << endl ;
+    cout << "sec = " << sec << endl ;
+    cout << "dv  = " << dv << endl ;*/
 }
-void ISBN::printParams(){
-    cout << "Parametros concatenados en un solo string " << endl << "\t> " ;
-    cout << id[0].datoAllStr << endl ;
+string ISBN::untilToken(string &tira){
+    string tilT = "", temp ;
+    int i ;
+    for(i=0; i<tira.length() && tira[i]!='-' && tira[i]!=' '; i++){ // get first token
+        tilT += tira[i] ;
+    }
+    for(; i<tira.length(); i++){ // Clean tira from first token
+            temp += tira [i+1] ;
+    }
+    tira = temp ;
+    return tilT ;
+}
+
+string ISBN::verif10digitos(){
+    int temp=0 ; string s_temp ;
+    string aux = isbnNoTolkens ;
+    int digit = 0 ;
+    for(int i=0, j=10 ; i<isbnNoTolkens.length(); i++, j--){
+        digit = ISBN::str2int(aux[i]) ;  //cout << "DigitX = " << digit*j << endl ;
+        temp += digit*j ;                // escala digito por digito
+    }
+    temp %= 11 ;
+    temp = 11 - temp ;
+    temp = (temp!=10) ? temp:1 ;
+    dv = temp ;                        // actualiza la variable global verif
+    s_temp = int2str(temp) ;
+    cout << "Verificador de 10 digitos = " << s_temp << endl ;
+    return s_temp ;
+}
+string ISBN::verif13digitos(int pares, int impares){
+    int temp = 10 - (pares+impares*3)%10 ;
+    temp = (temp!=10) ? temp:1 ;
+    cout << "Verficador para tipo 13 digitos = " << temp << endl ;
+    dv = temp ;                        // actualiza la variable global verif
+    string verif13 = int2str(temp) ;
+    return verif13 ;
 }
 int ISBN::sumPares(string str){
     int sumP = 0 ;
@@ -430,50 +452,41 @@ int ISBN::sumImpares(string str){
     }
     return sumI ;
 }
-string ISBN::verificador10digitos(){
-    int temp=0 ; string s_temp ;
-    for(int i=0; i<nn-1; i++){
-        temp += id[i].datoAllInt*(i+1) ;  // escala digito por digito
-    }
-    temp %= 11 ;
-    temp = temp!=10 ? temp : 1 ; // CONSULTAR QUE PASA CON DIGITO = 10
-    dv = temp ;                        // actualiza la variable global verif
-    s_temp = int2str(temp) ;
-    cout << "Verificador de 10 digitos = " << s_temp << endl ;
-    return s_temp ;
+string ISBN::getIsbn(){
+    return ss ;
 }
-string ISBN::verificador13digitos(int pares, int impares){
-    int temp = 10 - (pares+impares*3)%10 ;
-    temp = temp!=10 ? temp : 1 ; // CONSULTAR QUE PASA CON DIGITO = 10
-    cout << "Verficador para tipo 13 digitos = " << temp << endl ;
-    dv = temp ;                        // actualiza la variable global verif
-    string verif13 = int2str(temp) ;
-    return verif13 ;
+string ISBN::concatParams2str(int pr, int pa, int ed, int sec, int dv){
+    string s ;
+    s  = ISBN::int2str(pr)  ;
+    s += ISBN::int2str(pa)  ;
+    s += ISBN::int2str(ed)  ;
+    s += ISBN::int2str(sec) ;
+    //s += ISBN::int2str(dv) ; // Se concatenan los parametros en un solo string
+    return s ;
 }
-void ISBN::insertVerificador(string s){
-    char c = s[0] ;
-    int x = str2int(s) ;
-    id[n].dato = s ;
-    id[n].datoInt = x ;
-    id[nn].datoAllInt = c - '0' ;
-    id[0].datoAllStr += s ;
-    n +=1 ;
-    //nn += 1 ;
-}
-string ISBN::wholeIsbn(){
-    return fullIsbn ;
-}
-string ISBN::getFullIsbn(string verif){
-    string full ;
-    full = isbnInit ;
-    full += "-" ;
-    full += verif ;
-    return full ;
+string ISBN::concatParams2str(int pa, int ed, int sec, int dv){
+    string s ;
+    s += ISBN::int2str(pa)  ;
+    s += ISBN::int2str(ed)  ;
+    s += ISBN::int2str(sec) ;
+    //s += ISBN::int2str(dv) ; // Se concatenan los parametros en un solo string
+    return s ;
 }
 int ISBN::str2int(string s){
     stringstream convert ;
     int x ;
     convert.str(s) ;
+    convert >> x ;
+    return x ;
+}
+int ISBN::str2int(char c){
+    stringstream convert, ss ;
+    string target ;
+    ss << c ;
+    ss >> target ;
+
+    int x ;
+    convert.str(target) ;
     convert >> x ;
     return x ;
 }
@@ -483,4 +496,9 @@ string ISBN::int2str(int x){
     convert << x ;      // convierte entero a string
     s = convert.str() ;
     return s ;
+}
+
+void ISBN::printParams(){
+    cout << "Parametros concatenados en un solo string " << endl << "\t> " ;
+    cout << isbnNoTolkens << endl ;
 }
