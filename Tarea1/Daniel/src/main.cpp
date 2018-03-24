@@ -1,3 +1,27 @@
+/*
+******************************************************
+* Instituto Tecnológico de Costa Rica.
+* Ingeniería en Computación
+* Curso     : IC-2001 Grupo 2
+* Proyecto  : BD.pro
+* Archivo   : bd.h
+* Autor     : Edgar Daniel Chaves
+* Carnet    : 2013095110
+* Fecha     : 21 de Marzo de 2018
+*
+======================== Contenido ==================
+*
+* Mantiene al definición e implementación de las
+* siguientes clases:
+* >> Nodo
+* >> Book
+* >> MStorage
+* >> FileReader
+* >> Pqueue
+* >> ISBN
+*
+*/
+
 #include <iostream>
 #include <fstream>  // writer
 #include <string>
@@ -12,6 +36,11 @@
 #include "IndexVal.h"*/
 
 #include "bd.h"
+#include "isbn.h"
+#include "nodo.h"
+#include "book.h"
+#include "queue.h"
+#include "filereader.h"
 
 using namespace std ;
 
