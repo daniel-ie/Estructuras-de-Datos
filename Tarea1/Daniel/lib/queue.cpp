@@ -89,3 +89,4 @@ int Queue::inStock(vector<Book> &newMyStorage){
     }
     return cant ;
 }
+//
