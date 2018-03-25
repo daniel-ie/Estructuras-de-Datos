@@ -41,17 +41,21 @@
 #include "book.h"
 #include "queue.h"
 #include "filereader.h"
+#include "filewriter.h"
 
 using namespace std ;
 
 
 int main(){
     vector<Book> myStorage ;
+    //FileWriter<MStorage> mymStorage ;
+
     FileReader fr = FileReader("/home/edgar_ie/Documents/text1.txt") ;			// ~~ load(archivo.txt)
     Book book = Book() ;
     MStorage mStorage = MStorage() ;
     Queue queue = Queue() ;
     ISBN isbn = ISBN() ;
+    FileWriter fw = FileWriter("/home/edgar_ie/Documents/text2.txt") ;
 
 /***************** Carga la BD ********************/	// ~~ save() && save(archivo.txt)
     string buffer = fr.getBuffer() ;
@@ -74,11 +78,14 @@ int main(){
 
     book1 = fr.next() ;
     mStorage.parser(book1) ;
+    fw.fwriter(book1) ;
     book = Book(mStorage.getIsbnMS(), mStorage.getTituloMS(), mStorage.getAutorMS(), mStorage.getYearMS(), mStorage.getCantidadMS()) ;
 
-    //cout << "LIBRO : " << book. << endl ;
-    //string book2 = fr.next() ;
-    //cout << "LIBRO : " << book2 << endl ;
+    bool empty = fw.empty() ; // Revisa si BD esta vacia
+    cout << "Base de Datos esta vacia?: " << empty << endl ;
+
+    FileWriter fw1 = FileWriter("/home/edgar_ie/Documents/text2.txt", mStorage) ;
+    //cout << "FileWriter = " << fw.mStorage.getAutorMS() ; //mStorage.getAutorMS() << endl ;
 /**************************************************/
 
 /*** Cola que maneja las solicitudes de libros ****/	// ~~ get(isbn, usuario) && back(isbn)
