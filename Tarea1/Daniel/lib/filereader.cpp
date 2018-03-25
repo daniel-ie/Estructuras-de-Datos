@@ -60,3 +60,4 @@ string FileReader::getBuffer(){
         nextBookBuf = buffer ;
     return buffer ;
 }
+//
