@@ -80,3 +80,4 @@ void MStorage::setAutor(string autorM){autor = autorM ;}
 void MStorage::setYear(string yearM){year = yearM ;}
 void MStorage::setCantidad(string cantidadM){cantidad = cantidadM ;}*/
 MStorage::~MStorage(){}
+//
