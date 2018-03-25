@@ -29,3 +29,4 @@ Nodo::Nodo(string isbn, string titulo, string autor, string year, string cantida
     this->cantidad = cantidad ;
     siguiente = p ;
 }
+//
