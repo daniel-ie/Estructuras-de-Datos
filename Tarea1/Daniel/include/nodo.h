@@ -35,12 +35,13 @@ class Nodo {
 public:
     // Registros que soporta el Nodo
     string isbn, titulo, autor, year, cantidad ;
-    string user ;
+    string user ; string stockResult ;
     // Puntero al siguiente Nodo
     Nodo *siguiente ;
 
-    Nodo(string, string) ;
-    Nodo(string, string, Nodo *) ;
+    Nodo() ;
+    Nodo(string, string, string) ;
+    Nodo(string, string, string, Nodo *) ;
     /* =====================================================
         * Constructor con sobrecarga para la Clase Pqueue
         *
