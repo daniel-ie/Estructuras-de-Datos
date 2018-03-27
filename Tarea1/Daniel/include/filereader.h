@@ -18,10 +18,13 @@ using namespace std ;
 class FileReader {
 private:
     const char *BD_file ;
+    //string BD_file ;
     string isbn, titulo, autor, year, cantidad, content ;
     string buffer, nextBookBuf ;
 public:
+    FileReader() ;
     FileReader(const char *) ;
+    //FileReader(string) ;
     void writer(string) ;
     void reader() ;
     string getBuffer() ;
