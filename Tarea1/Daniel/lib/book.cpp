@@ -67,4 +67,3 @@ string Book::getEditor(){
 string Book::getRegion(){
     return  "Region_Test_Data";//pdato->autor;
 }
-//
