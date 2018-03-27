@@ -14,22 +14,32 @@
 ///             Clase Queue
 ////////////////////////////////////////////////////
 class Queue:public MStorage{
-    Nodo *pdato ;
-    Nodo *frente ;
-    Nodo *final ;
-    string isbnQ, userQ ;
+    string isbnQ, userQ, prestarQ, stockResultQ, prestar ;
+    MStorage *myStorage ;
+    Nodo *node ;
 public:
-    class Invalid{} ;
+    int rear, front, size ;
+    Nodo arr[100]  ; 	 // Circular queue
 
-    //Queue():MStorage(){}
-    //Queue(string, string):MStorage(){}
     Queue() ;
     Queue(string, string) ;
-    void insert(string, string) ;
-    void mostrar(int) ;
+    void enQueue(Nodo &) ;
+    //void enQueue(string, string, string) ; //int value) ;
+    int  deQueue() ;
+    void displayQueue() ; // void pqueue() ;
     int inStock(vector<Book> &) ;
-
 } ;
+/*class Queue:public MStorage{
+    Nodo *pdato ; Nodo *frente ; Nodo *final ;
+    string isbnQ, userQ, stockResultQ, prestar ;
+    MStorage *myStorage ;
+public:
+    Queue() ;
+    Queue(string, string) ;
+    void registraSolicitud(string, string, bool) ;
+    void pqueue() ;
+    int inStock(vector<Book> &) ;
+} ;*/
 
 
 #endif // QUEUE_H
