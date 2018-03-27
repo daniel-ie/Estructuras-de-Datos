@@ -4,15 +4,34 @@
 ////////////////////////////////////////////////////
 ///             Clase FileWriter
 ////////////////////////////////////////////////////
+//FileWriter::FileWriter(){
+
 FileWriter::FileWriter(const char *file){
     BD_file1 = file ;
-    //MStorage mStorage ;
-    //cout << "test = " << mStorage.getAutorMS() << endl ;
-} //:MStorage(){}
+}
+FileWriter::FileWriter(const char *file, string buffer){
+    BD_file1 = file ;
+    //string buffer ;
+    /*buffer  = mStorage.getIsbnMS()     ; buffer += ", " ;
+    buffer += mStorage.getTituloMS()   ; buffer += ", " ;
+    buffer += mStorage.getAutorMS()    ; buffer += ", " ;
+    buffer += mStorage.getYearMS()     ; buffer += ", " ;
+    buffer += mStorage.getCantidadMS() ;*/
+
+    //cout << "test = " << buffer << endl ;
+    FileWriter::fwriter(buffer) ;
+}
 FileWriter::FileWriter(const char *file, MStorage &mStorage){
     BD_file1 = file ;
- //   MStorage mStorage ; //= mStorage1 ;
-    cout << "test = " << mStorage.getAutorMS() << endl ;
+    string buffer ;
+    buffer  = mStorage.getIsbnMS()     ; buffer += ", " ;
+    buffer += mStorage.getTituloMS()   ; buffer += ", " ;
+    buffer += mStorage.getAutorMS()    ; buffer += ", " ;
+    buffer += mStorage.getYearMS()     ; buffer += ", " ;
+    buffer += mStorage.getCantidadMS() ;
+
+    //cout << "test = " << buffer << endl ;
+    FileWriter::fwriter(buffer) ;
 }
 void FileWriter::fwriter(string s){
     string buffer = s ;
@@ -25,6 +44,17 @@ void FileWriter::fwriter(string s){
     else
         cout << "Can't open file" << endl;
 }
+/*void FileWriter::fwriter(string s, MStorage &mStorage){
+    string buffer = s ;
+    ofstream BD(BD_file1, ios_base::app) ;
+    if(BD.is_open()){
+        buffer += "\n" ;
+        BD << buffer  ;
+        BD.close() ;
+    }
+    else
+        cout << "Can't open file" << endl;
+}*/
 bool FileWriter::empty(){
     bool empty = false ;
     ifstream BD(BD_file1) ;
@@ -86,4 +116,3 @@ string FileReader::getBuffer(){
     return buffer ;
 }
 */
-//
