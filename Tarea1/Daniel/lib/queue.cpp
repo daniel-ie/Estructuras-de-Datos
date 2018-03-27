@@ -5,88 +5,162 @@
 #include <sstream>
 #include <stdlib.h>
 #include <vector>
+#include <array>
+#include <iterator>
+
+#include<bits/stdc++.h>
 
 #include "queue.h"
 #include "mstorage.h"
 #include "nodo.h"
+#include "cmd.h"
 
 ////////////////////////////////////////////////////
 ///             Clase Queue
 ////////////////////////////////////////////////////
 //Queue::Invalid{} ;
 Queue::Queue():MStorage(){
-    pdato = NULL ;
-    frente = NULL ;
-    final = NULL ;
+    front = -1 ;
+    rear  = -1 ;
+    size  =  100 ;
+    arr ;
 }
 Queue::Queue(string isbnQ, string userQ):MStorage(){
-    pdato = NULL ;
-    frente = NULL ;
-    final = NULL ;
+    front = -1 ;
+    rear  = -1 ;
+    size  =  100 ;
+    arr   ;
     this->isbnQ = isbnQ ;
     this->userQ = userQ ;
-
-    //stock() ;
-    insert(isbnQ, userQ) ; //isbnQ, userQ) ;
-    //inStock() ;
-    //mostrar() ;
 }
 
-void Queue::insert(string isbnQ, string userQ){
-    this->isbnQ = isbnQ ;
-    this->userQ = userQ ;
+void Queue::enQueue(Nodo &nodo){
+    cout << "nodito " << nodo.isbn << endl ;
 
-    pdato = new Nodo(isbnQ, userQ, pdato) ;
-    pdato->isbn = isbnQ ; pdato->user = userQ ;
-    if(final == NULL){
-        final = pdato ;
-        pdato->siguiente = final ;
-    }
-    else{
-        pdato->siguiente = final->siguiente ;
-        final->siguiente = pdato ;
-        final = pdato ;
-    }
-    //inStock() ;
-}
-void Queue::mostrar(int stockCant){ // será el comando queue
-    if(final == NULL){
-        cout << "list is empty" << endl  ;
+    if ((front == 0 && rear == size-1) ||
+            (rear == front-1)){
+        cout << "Cola llena" << endl ;
         return ;
     }
-
-    string stockResult ;
-    if(stockCant>0)
-        stockResult = "Asignado" ;
-    else
-        stockResult = "No asignado" ;
-
-    pdato = final->siguiente ;
-
-    cout << "ISBN     " << string(15, ' ') ;
-    cout << "Usuario  " << string(15, ' ') ;
-    cout << "Resultado" << string(15, ' ') ;
-    cout << endl ;
-    while(pdato != final){
-        cout << pdato->isbn << string(24-pdato->isbn.length(), ' ') ;  // espaceo ct
-        cout << pdato->user << string(24-pdato->user.length(), ' ') ;
-        cout << stockResult ;
-        cout << endl ;
-        pdato = pdato->siguiente ;
+    else if (front == -1){ // Insert First Element
+        cout << "Primero en cola = " << endl ;
+        front = 0 ;
+        rear = 0 ;
+        arr[rear] = nodo ;
     }
-    cout << pdato->isbn << string(24-pdato->isbn.length(), ' ') ;
-    cout << pdato->user << string(24-pdato->user.length(), ' ') ;
-    cout << stockResult ;
-    cout << endl ;
+    else if (rear == size-1 && front != 0){
+        cout << "?? en cola = " << endl ;
+        rear = 0;
+        arr[rear] = nodo ;
+    }
+    else{
+        cout << "Colas " << endl ;
+        rear += 1;
+        arr[rear] = nodo ;
+    }
+}
 
+/*void Queue::enQueue(string isbnQ, string userQ, string prestarQ){
+    this->isbnQ     = isbnQ ;
+    this->userQ     = userQ ;
+    this->prestarQ  = prestarQ ;
+}*/
+/*
+    front = -1 ;
+    rear  = -1 ;
+    size  =  1000 ;
+    //*arr ; //   = NULL ;
+    node = NULL ;
+
+    node = new Nodo(isbnQ, userQ, prestarQ, node) ;
+    cout << "Nodo queue = " << node->isbn << endl ;
+
+    if ((front == 0 && rear == size-1) ||
+            (rear == front-1)){
+        cout << "Cola llena" << endl ;
+        return ;
+    }
+    else if (front == -1){ // Insert First Element
+        cout << "Primero en cola = " << endl ;
+        front = 0 ;
+        rear = 0 ;
+        arr[rear] = nodo ;
+    }
+    else if (rear == size-1 && front != 0){
+        cout << "?? en cola = " << endl ;
+        rear = 0;
+        arr[rear] = node ;
+    }
+    else{
+        cout << "Colas " << endl ;
+        rear += 1;
+        arr[rear] = node ;
+        //arr[rear] = node ;
+
+    }*/
+
+void Queue::displayQueue(){
+    if (front == -1){
+        cout << "Cola vacia" << endl ;
+        return ;
+    }
+    cout << "rear: " << rear << "front: " << front << endl ;
+    if (rear >= front){
+        cout << "\nISBN" << "\t\t\t" << "Usuario" << "\t\t\t" << "Estado" << endl ;
+        for (unsigned int i = 0 ; i < 2; i++){
+            cout << arr[i].isbn << "\t" ; // VER COMO ACCEDER CON CONTADOR
+            //cout << arr[i]->user << "\t" ;
+            //cout << (arr.begin()+i)->stockResult << endl ;
+            //cout << "it= " << it << endl ;
+        }
+    }
+    else{
+        cout << "in 2" ;
+    }
 }
 int Queue::inStock(vector<Book> &newMyStorage){
     int cant = 0 ;
     unsigned int size = newMyStorage.size() ;
     for(unsigned int i=0; i<size; i++){
-        if(newMyStorage[i].getIsbn() == isbnQ)  // revisa si el libro esta en existencias
+        if((newMyStorage.begin()+i)->getIsbn() == isbnQ) // revisa si el libro esta en existencias
             cant += 1 ;
     }
     return cant ;
 }
-//
+
+/*for (int i = front; i < size; i++){
+    //cout << arr[i] << " " ;
+    cout << arr[i]->isbn << "\t" ;
+    cout << arr[i]->user << "\t" ;
+    cout << arr[i]->stockResult << endl ;
+}
+for (int i = 0; i <= rear; i++){
+    cout << arr[i]->isbn << "\t" ;
+    cout << arr[i]->user << "\t" ;
+    cout << arr[i]->stockResult << endl ;
+}*/
+
+
+
+
+/*if(final == NULL){
+cout << "No se han realizado nuevas solicitudes" << endl  ;
+return ;
+}
+node = final->siguiente ; // LA COLA NO ESTA ALMACENANDO NUEVOS ELEMENTOS
+
+cout << "ISBN     " << string(15, ' ') ;
+cout << "Usuario  " << string(15, ' ') ;
+cout << "Resultado" << string(15, ' ') ;
+cout << endl ;
+while(node != final){
+cout << node->isbn << string(24-node->isbn.length(), ' ') ;  // espaceo ct
+cout << node->user << string(24-node->user.length(), ' ') ;
+cout << node->stockResult ;
+cout << endl ;
+node = node->siguiente ;
+}
+cout << node->isbn << string(24-node->isbn.length(), ' ') ;
+cout << node->user << string(24-node->user.length(), ' ') ;
+cout << node->stockResult ;
+cout << endl ;*/
