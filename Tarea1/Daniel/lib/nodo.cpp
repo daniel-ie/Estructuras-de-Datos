@@ -3,13 +3,17 @@
 ////////////////////////////////////////////////////
 ///             Clase Nodo
 ////////////////////////////////////////////////////
-/*--------------------------- Sobrecarga para  Clase Queue ----------------------------------------------*/
-Nodo::Nodo(string isbn, string user){
-    this->isbn = isbn ; this->user = user ;
+
+Nodo::Nodo(){
     siguiente = NULL ;
 }
-Nodo::Nodo(string isbn, string user, Nodo *p){
-    this->isbn = isbn ; this->user = user ;
+/*--------------------------- Sobrecarga para  Clase Queue ----------------------------------------------*/
+Nodo::Nodo(string isbn, string user, string stockResult){
+    this->isbn = isbn ; this->user = user ; this->stockResult = stockResult ;
+    siguiente = NULL ;
+}
+Nodo::Nodo(string isbn, string user, string stockResult, Nodo *p){
+    this->isbn = isbn ; this->user = user ; this->stockResult = stockResult ;
     siguiente = p ;
 }
 /*---------------------------- Sobrecarga para  Clase Book ----------------------------------------------*/
@@ -29,4 +33,3 @@ Nodo::Nodo(string isbn, string titulo, string autor, string year, string cantida
     this->cantidad = cantidad ;
     siguiente = p ;
 }
-//
