@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////
 ///             Clase FileReader
 ////////////////////////////////////////////////////
+FileReader::FileReader(){}
 FileReader::FileReader(const char *file){
     BD_file = file ;
 }
@@ -34,7 +35,7 @@ string FileReader::untilTokenFR(string &tira){
     nextBookBuf = temp ;
     return tilT ;
 }
-void FileReader::reader(){
+void FileReader::reader(){     
         ifstream BD(BD_file) ;
         string line ;
         if(BD.is_open()){
@@ -60,4 +61,3 @@ string FileReader::getBuffer(){
         nextBookBuf = buffer ;
     return buffer ;
 }
-//
