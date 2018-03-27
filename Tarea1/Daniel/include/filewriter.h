@@ -25,8 +25,10 @@ private:
     //string isbn, titulo, autor, year, cantidad, content ;
     //string buffer, nextBookBuf ;
 public:
+    //FileWriter() ;
     FileWriter():MStorage(){}
     FileWriter(const char *) ;
+    FileWriter(const char *, string) ;
     FileWriter(const char *, MStorage &) ;
 /*    FileWriter(const char *file, MStorage &mStorage):MStorage(){
         BD_file1 = file ;
